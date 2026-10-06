@@ -35,7 +35,8 @@ function renderRow(props: Partial<Parameters<typeof PlanItemRow>[0]> = {}) {
 describe('PlanItemRow', () => {
   it('shows parameters and removed-equipment warning', () => {
     renderRow()
-    expect(screen.getByText('3 × 8–10 · 40 kg · przerwa 120 s')).toBeInTheDocument()
+    expect(screen.getByLabelText('3 serie po 8–10 powtórzeń, przerwa 120 s')).toHaveTextContent('3 × 8–10')
+    expect(screen.getByText('40')).toBeInTheDocument()
     expect(screen.getByRole('note')).toHaveTextContent('Sprzęt oznaczony jako usunięty z siłowni')
   })
 

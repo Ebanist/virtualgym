@@ -8,6 +8,10 @@ import { useAuth } from '../../app/AuthProvider'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
+import { PageHeader } from '../../components/PageHeader'
+import { Segmented } from '../../components/Segmented'
+import { useTheme } from '../../app/ThemeProvider'
+import type { ThemePreference } from '../../app/theme'
 import { TextField } from '../../components/TextField'
 import { changePasswordSchema, profileSchema, type ChangePasswordForm, type ProfileForm } from './schemas'
 
@@ -15,7 +19,8 @@ export function ProfilePage() {
   const { t } = useTranslation()
   return (
     <>
-      <h1>{t('profile.title')}</h1>
+      <PageHeader title={t('profile.title')} />
+      <Appearance />
       <ProfileDetails />
       <ChangePassword />
       <Logout />
@@ -119,11 +124,31 @@ function ChangePassword() {
   )
 }
 
+function Appearance() {
+  const { t } = useTranslation()
+  const { preference, setPreference } = useTheme()
+  return (
+    <Card>
+      <h2>{t('theme.title')}</h2>
+      <Segmented<ThemePreference>
+        label={t('theme.label')}
+        value={preference}
+        options={[
+          { value: 'system', label: t('theme.system'), icon: 'monitor' },
+          { value: 'light', label: t('theme.light'), icon: 'sun' },
+          { value: 'dark', label: t('theme.dark'), icon: 'moon' },
+        ]}
+        onChange={setPreference}
+      />
+    </Card>
+  )
+}
+
 function Logout() {
   const { t } = useTranslation()
   const { logout } = useAuth()
   return (
-    <Button variant="danger" block onClick={() => void logout()}>
+    <Button variant="danger" block icon="logout" onClick={() => void logout()}>
       {t('nav.logout')}
     </Button>
   )

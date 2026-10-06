@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SessionSet, UpdateSetRequest } from '../../api/workouts'
+import { Icon } from '../../components/Icon'
 import { parseNumber } from './format'
 import styles from './Workout.module.css'
 
@@ -75,7 +76,7 @@ export function SetRow({ set, repsHint, disabled, onSave, onCompleted }: Props) 
           disabled={disabled}
           onClick={toggle}
         >
-          ✓
+          <Icon name="check" size={24} strokeWidth={3} />
         </button>
       </td>
     </tr>

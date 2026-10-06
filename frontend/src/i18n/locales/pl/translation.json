@@ -364,7 +364,10 @@
     "note": "Notatka (opcjonalnie)",
     "repsRange": "„Do” musi być ≥ „od”.",
     "chooseOtherEquipment": "Wybrany wcześniej sprzęt jest niedostępny – wybierz inny.",
-    "exerciseNoLongerAvailable": "To ćwiczenie nie jest już dostępne w tej siłowni. Usuń pozycję i dodaj inne ćwiczenie."
+    "exerciseNoLongerAvailable": "To ćwiczenie nie jest już dostępne w tej siłowni. Usuń pozycję i dodaj inne ćwiczenie.",
+    "editItem": "Edytuj: {{name}}",
+    "deleteItem": "Usuń: {{name}}",
+    "paramsLabel": "{{sets}} serie po {{reps}} powtórzeń, przerwa {{rest}} s"
   },
   "workout": {
     "startDay": "Rozpocznij trening",
@@ -378,7 +381,7 @@
     "exerciseOf": "Ćwiczenie {{n}} z {{total}}",
     "target": "Cel: {{value}}",
     "previous": "Poprzednio ({{date}}):",
-    "noPrevious": "Brak poprzedniego wyniku – to pierwszy raz!",
+    "noPrevious": "Pierwszy raz!",
     "set": "Seria",
     "weightKg": "Ciężar (kg)",
     "reps": "Powt.",
@@ -404,7 +407,11 @@
     "restOver": "Koniec przerwy!",
     "live": "Trwa trening",
     "setsProgress": "Wykonane serie: {{done}} z {{total}}",
-    "quickStart": "Szybki start"
+    "quickStart": "Szybki start",
+    "targetLabel": "Cel",
+    "previousLabel": "Poprzednio · {{date}}",
+    "previousShort": "Poprzednio",
+    "progress": "Postęp treningu"
   },
   "history": {
     "title": "Historia treningów",
@@ -412,7 +419,11 @@
     "summary": "ćwiczenia: {{exercises}} · serie: {{sets}} · objętość: {{volume}} kg",
     "duration": "{{minutes}} min",
     "abandoned": "Trening porzucony.",
-    "noSets": "Brak wykonanych serii."
+    "noSets": "Brak wykonanych serii.",
+    "total": "Zapisane treningi: {{count}}",
+    "setsLabel": "serie",
+    "minutes": "minut",
+    "volumeKg": "kg objętości"
   },
   "theme": {
     "title": "Wygląd",

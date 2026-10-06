@@ -6,6 +6,10 @@ import { planActions, useDeletePlan, usePlan, usePlanMutation, type Plan, type P
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { buttonClass } from '../../components/buttonClass'
+import { EmptyState } from '../../components/EmptyState'
+import { Icon } from '../../components/Icon'
+import { PageHeader } from '../../components/PageHeader'
+import { SkeletonList } from '../../components/Skeleton'
 import { TextField } from '../../components/TextField'
 import { useStartWorkout } from '../workout/useStartWorkout'
 import { PlanItemRow } from './PlanItemRow'
@@ -15,7 +19,7 @@ export function PlanPage() {
   const { planId = '' } = useParams()
   const { t } = useTranslation()
   const plan = usePlan(planId)
-  if (plan.isPending) return <p>{t('app.loading')}</p>
+  if (plan.isPending) return <SkeletonList count={4} />
   if (plan.isError) return <Alert kind="error">{errorMessage(t, plan.error)}</Alert>
   return <PlanView plan={plan.data} />
 }
@@ -34,9 +38,6 @@ function PlanView({ plan }: { plan: Plan }) {
 
   return (
     <>
-      <p className={styles.meta}>
-        <Link to="/plans">← {t('plans.title')}</Link> · <Link to={`/gyms/${plan.gymId}`}>{plan.gymName}</Link>
-      </p>
       {editing ? (
         <form
           className={styles.inlineForm}
@@ -53,16 +54,29 @@ function PlanView({ plan }: { plan: Plan }) {
           </Button>
         </form>
       ) : (
-        <h1>{plan.name}</h1>
+        <PageHeader
+          title={plan.name}
+          subtitle={
+            <Link to={`/gyms/${plan.gymId}`} className={styles.gymLink}>
+              <Icon name="pin" size={14} /> {plan.gymName}
+            </Link>
+          }
+          back={{ to: '/plans', label: t('plans.title') }}
+        />
       )}
-      {plan.description && <p>{plan.description}</p>}
+      {plan.description && <p className={styles.description}>{plan.description}</p>}
       {plan.archived && <Alert kind="info">{t('plans.isArchived')}</Alert>}
       {plan.warningCount > 0 && <Alert kind="warning">{t('plans.warningInfo', { count: plan.warningCount })}</Alert>}
       {error && <Alert kind="error">{errorMessage(t, error)}</Alert>}
       <div className={styles.actions}>
-        {!editing && <Button small onClick={() => setEditing(true)}>{t('plans.rename')}</Button>}
+        {!editing && (
+          <Button small icon="edit" onClick={() => setEditing(true)}>
+            {t('plans.rename')}
+          </Button>
+        )}
         <Button
           small
+          icon="copy"
           disabled={copy.isPending}
           onClick={async () => {
             const created = await copy.mutateAsync(undefined)
@@ -71,12 +85,13 @@ function PlanView({ plan }: { plan: Plan }) {
         >
           {t('plans.copy')}
         </Button>
-        <Button small disabled={archive.isPending} onClick={() => archive.mutate(undefined)}>
+        <Button small icon="archive" disabled={archive.isPending} onClick={() => archive.mutate(undefined)}>
           {plan.archived ? t('plans.unarchive') : t('plans.archive')}
         </Button>
         <Button
           small
           variant="danger"
+          icon="trash"
           disabled={remove.isPending}
           onClick={async () => {
             if (!window.confirm(t('plans.deleteConfirm'))) return
@@ -88,7 +103,7 @@ function PlanView({ plan }: { plan: Plan }) {
         </Button>
       </div>
 
-      {plan.days.length === 0 && <p className={styles.meta}>{t('plans.noDays')}</p>}
+      {plan.days.length === 0 && <EmptyState icon="plan">{t('plans.noDays')}</EmptyState>}
       {plan.days.map((day, index) => (
         <DaySection key={day.id} plan={plan} day={day} isFirst={index === 0} isLast={index === plan.days.length - 1} />
       ))}
@@ -130,19 +145,22 @@ function DaySection({ plan, day, isFirst, isLast }: { plan: Plan; day: PlanDay; 
             </Button>
           </form>
         ) : (
-          <h2>{day.name}</h2>
+          <h2>
+            {day.name}
+            <span className={styles.dayCount}>{t('plans.exercisesCount', { count: day.items.length })}</span>
+          </h2>
         )}
-        <div className={styles.moveButtons} style={{ flexDirection: 'row' }}>
+        <div className={styles.moveButtonsRow}>
           <button type="button" className={styles.iconButton} aria-label={t('plans.moveDayUp')} disabled={isFirst || move.isPending} onClick={() => move.mutate('UP')}>
-            ↑
+            <Icon name="arrowUp" size={18} />
           </button>
           <button type="button" className={styles.iconButton} aria-label={t('plans.moveDayDown')} disabled={isLast || move.isPending} onClick={() => move.mutate('DOWN')}>
-            ↓
+            <Icon name="arrowDown" size={18} />
           </button>
         </div>
       </div>
       {error && <Alert kind="error">{errorMessage(t, error)}</Alert>}
-      {day.items.length === 0 && <p className={styles.dayFooter}>{t('plans.noItems')}</p>}
+      {day.items.length === 0 && <p className={styles.empty}>{t('plans.noItems')}</p>}
       <ol className={styles.items}>
         {day.items.map((item, index) => (
           <PlanItemRow
@@ -161,23 +179,25 @@ function DaySection({ plan, day, isFirst, isLast }: { plan: Plan; day: PlanDay; 
       </ol>
       {day.items.length > 0 && !plan.archived && (
         <div className={styles.dayFooter}>
-          <Button variant="primary" block disabled={start.isPending} onClick={() => void start.run({ planId: plan.id, planDayId: day.id })}>
-            ▶ {t('workout.startDay')}
+          <Button variant="primary" block icon="play" disabled={start.isPending} onClick={() => void start.run({ planId: plan.id, planDayId: day.id })}>
+            {t('workout.startDay')}
           </Button>
         </div>
       )}
-      <div className={`${styles.dayFooter} ${styles.actions}`}>
+      <div className={styles.dayActions}>
         <Link to={`/plans/${plan.id}/days/${day.id}/add`} className={buttonClass({ small: true })}>
+          <Icon name="plus" size={16} />
           {t('plans.addExercise')}
         </Link>
         {!renaming && (
-          <Button small onClick={() => setRenaming(true)}>
+          <Button small variant="ghost" icon="edit" onClick={() => setRenaming(true)}>
             {t('plans.renameDay')}
           </Button>
         )}
         <Button
           small
-          variant="danger"
+          variant="ghost"
+          icon="trash"
           onClick={() => {
             if (window.confirm(t('plans.deleteDayConfirm'))) remove.mutate(undefined)
           }}
@@ -194,7 +214,7 @@ function AddDayForm({ defaultName, onAdd, pending }: { defaultName: string; onAd
   const [name, setName] = useState('')
   return (
     <form
-      className={styles.inlineForm}
+      className={`${styles.inlineForm} ${styles.addDay}`}
       onSubmit={async (e) => {
         e.preventDefault()
         await onAdd(name.trim() || defaultName)
@@ -202,7 +222,7 @@ function AddDayForm({ defaultName, onAdd, pending }: { defaultName: string; onAd
       }}
     >
       <TextField label={t('plans.newDay')} placeholder={defaultName} value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
-      <Button type="submit" disabled={pending}>
+      <Button type="submit" icon="plus" disabled={pending}>
         {t('plans.addDay')}
       </Button>
     </form>

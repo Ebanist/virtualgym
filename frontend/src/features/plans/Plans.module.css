@@ -1,38 +1,26 @@
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
-
-.header h1 {
-  margin: 0;
-}
-
 .meta {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
-.tabs {
-  display: flex;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
+.description {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
 .day {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   margin-bottom: var(--space-4);
+  overflow: hidden;
 }
 
 .dayHeader {
@@ -40,13 +28,22 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
-  padding: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
 }
 
 .dayHeader h2 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+}
+
+.dayCount {
+  margin-left: var(--space-2);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 .items {
@@ -57,13 +54,14 @@
 
 .item {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-3);
   padding: var(--space-3);
   border-bottom: 1px solid var(--border);
 }
 
 .itemWarning {
   background: var(--warning-bg);
+  box-shadow: inset 3px 0 0 var(--warning);
 }
 
 .itemBody {
@@ -72,56 +70,143 @@
 }
 
 .itemTitle {
+  font-family: var(--font-display);
   font-weight: 600;
+  line-height: 1.3;
+}
+
+.itemEquipment {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
 .warning {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: var(--space-1);
   color: var(--warning);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
+}
+
+.params {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: var(--space-2);
+}
+
+.param {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.param strong {
+  font-family: var(--font-display);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.note {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
 /* Przyciski ↑/↓ – duże cele dotykowe, wygodne na telefonie. */
 .moveButtons {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.moveButtonsRow {
+  composes: moveButtons;
+  flex-direction: row;
   gap: var(--space-1);
 }
 
+.position {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
 .iconButton {
+  display: grid;
+  place-items: center;
   width: var(--tap);
   height: var(--tap);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--surface);
-  font-size: 1.1rem;
+  background: var(--surface-2);
+  color: var(--text);
   cursor: pointer;
 }
 
+.iconButton:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+
 .iconButton:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .itemActions {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-2);
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
 .dayFooter {
   padding: var(--space-3);
 }
 
+.dayActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.empty {
+  padding: var(--space-4);
+  color: var(--text-muted);
+  margin: 0;
+}
+
 .inlineForm {
   display: flex;
   gap: var(--space-2);
   align-items: flex-end;
+  flex: 1;
 }
 
 .inlineForm > :first-child {
   flex: 1;
+  margin-bottom: 0;
+}
+
+.addDay {
+  padding: var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
 }
 
 .grid2 {
@@ -133,13 +218,25 @@
 .radio {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  min-height: var(--tap);
+  gap: var(--space-3);
+  min-height: 52px;
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+
+.radio:has(input:checked) {
+  border-color: var(--accent-text);
+  background: var(--accent-soft);
 }
 
 .radio input {
   width: 20px;
   height: 20px;
+  accent-color: var(--accent);
 }
 
 .pickList {
@@ -149,4 +246,23 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+}
+
+.warningCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--space-2);
+}
+
+.gymLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.gymLink:hover {
+  color: var(--text);
 }

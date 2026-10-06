@@ -12,6 +12,8 @@ import {
 } from '../../api/workouts'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
+import { Icon } from '../../components/Icon'
+import { SkeletonList } from '../../components/Skeleton'
 import { formatDate } from '../../i18n/format'
 import { AddExercisePanel } from './AddExercisePanel'
 import { formatResults, formatTarget } from './format'
@@ -24,7 +26,7 @@ export function WorkoutPage() {
   const { sessionId = '' } = useParams()
   const { t } = useTranslation()
   const session = useSession(sessionId)
-  if (session.isPending) return <p>{t('app.loading')}</p>
+  if (session.isPending) return <SkeletonList count={4} />
   if (session.isError) return <Alert kind="error">{errorMessage(t, session.error)}</Alert>
   if (session.data.status !== 'IN_PROGRESS') return <Navigate to={`/history/${sessionId}`} replace />
   return <ActiveWorkout session={session.data} />
@@ -53,6 +55,8 @@ function ActiveWorkout({ session }: { session: Session }) {
   const current = exercises[Math.min(index, exercises.length - 1)]
   const currentIndex = current ? exercises.indexOf(current) : -1
   const doneCount = (e: SessionExercise) => e.sets.filter((s) => s.completed).length
+  const totalSets = exercises.reduce((sum, e) => sum + e.sets.length, 0)
+  const doneSets = exercises.reduce((sum, e) => sum + doneCount(e), 0)
 
   return (
     <>
@@ -61,6 +65,23 @@ function ActiveWorkout({ session }: { session: Session }) {
         <div className={styles.meta}>
           {session.gymName} · {t('workout.startedAt', { date: formatDate(session.startedAt) })}
         </div>
+        {totalSets > 0 && (
+          <div className={styles.progress}>
+            <div
+              className={styles.progressTrack}
+              role="progressbar"
+              aria-label={t('workout.progress')}
+              aria-valuemin={0}
+              aria-valuemax={totalSets}
+              aria-valuenow={doneSets}
+            >
+              <div className={styles.progressBar} style={{ width: `${(doneSets / totalSets) * 100}%` }} />
+            </div>
+            <span className={styles.progressText}>
+              {doneSets}/{totalSets}
+            </span>
+          </div>
+        )}
       </div>
       {error && <Alert kind="error">{errorMessage(t, error)}</Alert>}
 
@@ -76,6 +97,7 @@ function ActiveWorkout({ session }: { session: Session }) {
                 aria-current={i === currentIndex ? 'step' : undefined}
                 onClick={() => setIndex(i)}
               >
+                {done && <Icon name="check" size={14} strokeWidth={3} />}
                 {i + 1}. {e.exercise.name}
               </button>
             )
@@ -108,11 +130,12 @@ function ActiveWorkout({ session }: { session: Session }) {
 
       {current && (
         <div className={styles.navRow}>
-          <Button disabled={currentIndex <= 0} onClick={() => setIndex(currentIndex - 1)}>
-            ← {t('workout.prev')}
+          <Button icon="chevronLeft" disabled={currentIndex <= 0} onClick={() => setIndex(currentIndex - 1)}>
+            {t('workout.prev')}
           </Button>
           <Button disabled={currentIndex >= exercises.length - 1} onClick={() => setIndex(currentIndex + 1)}>
-            {t('workout.next')} →
+            {t('workout.next')}
+            <Icon name="chevronRight" size={18} />
           </Button>
         </div>
       )}
@@ -130,14 +153,17 @@ function ActiveWorkout({ session }: { session: Session }) {
         />
       ) : (
         <div className={styles.row}>
-          <Button onClick={() => setAdding(true)}>{t('workout.addExercise')}</Button>
+          <Button icon="plus" onClick={() => setAdding(true)}>
+            {t('workout.addExercise')}
+          </Button>
         </div>
       )}
 
-      <div className={styles.row}>
+      <div className={styles.finishRow}>
         <Button
           variant="primary"
           block
+          icon="flag"
           disabled={finish.isPending}
           onClick={async () => {
             if (!window.confirm(t('workout.finishConfirm'))) return
@@ -167,6 +193,7 @@ function ActiveWorkout({ session }: { session: Session }) {
         running={timer.running}
         finished={timer.finished}
         remaining={timer.remaining}
+        total={timer.total}
         onAdd={() => timer.addSeconds(15)}
         onStop={timer.stop}
         onDismiss={timer.dismiss}
@@ -189,28 +216,39 @@ interface ExerciseViewProps {
 
 function ExerciseView({ exercise: e, position, total, onSaveSet, onSetCompleted, onAddSet, onRemoveLastSet, onRemove }: ExerciseViewProps) {
   const { t } = useTranslation()
-  const target = formatTarget(t, e)
+  const target = formatTarget(e)
   const photo = e.equipment?.photoUrl
   return (
     <section className={styles.exercise} aria-label={e.exercise.name}>
-      <div className={styles.meta}>{t('workout.exerciseOf', { n: position, total })}</div>
+      <div className={styles.overline}>{t('workout.exerciseOf', { n: position, total })}</div>
       <h2>{e.exercise.name}</h2>
-      <div className={styles.meta}>{e.equipment ? e.equipment.name : t('plans.bodyweight')}</div>
+      <div className={styles.equipmentLine}>
+        <Icon name="gym" size={16} />
+        {e.equipment ? e.equipment.name : t('plans.bodyweight')}
+      </div>
       {e.equipment && (e.equipment.deleted || e.equipment.status === 'REMOVED_FROM_GYM') && (
         <Alert kind="warning">{t('plans.equipmentRemoved')}</Alert>
       )}
       {photo && <img src={photo} alt={e.equipment?.name ?? ''} className={styles.photo} />}
-      {target && <div className={styles.target}>{target}</div>}
-      {e.note && <div className={styles.meta}>{e.note}</div>}
-      <div className={styles.previous}>
-        {e.previous && e.previous.sets.length > 0 ? (
-          <>
-            <strong>{t('workout.previous', { date: formatDate(e.previous.date) })}</strong> {formatResults(e.previous.sets)}
-          </>
-        ) : (
-          t('workout.noPrevious')
-        )}
+      <div className={styles.infoRow}>
+        <div className={styles.infoBox}>
+          <div className={styles.infoLabel}>
+            <Icon name="flag" size={12} />
+            {t('workout.targetLabel')}
+          </div>
+          <div className={styles.infoValue}>{target ?? '—'}</div>
+        </div>
+        <div className={styles.infoBox}>
+          <div className={styles.infoLabel}>
+            <Icon name="history" size={12} />
+            {e.previous ? t('workout.previousLabel', { date: formatDate(e.previous.date) }) : t('workout.previousShort')}
+          </div>
+          <div className={styles.previousValue}>
+            {e.previous && e.previous.sets.length > 0 ? formatResults(e.previous.sets) : t('workout.noPrevious')}
+          </div>
+        </div>
       </div>
+      {e.note && <p className={styles.note}>{e.note}</p>}
       <table className={styles.sets}>
         <thead>
           <tr>
@@ -235,15 +273,15 @@ function ExerciseView({ exercise: e, position, total, onSaveSet, onSetCompleted,
         </tbody>
       </table>
       <div className={styles.row}>
-        <Button small onClick={onAddSet}>
-          + {t('workout.addSet')}
+        <Button small icon="plus" onClick={onAddSet}>
+          {t('workout.addSet')}
         </Button>
         {e.sets.length > 0 && (
           <Button small variant="ghost" onClick={onRemoveLastSet}>
             − {t('workout.removeSet')}
           </Button>
         )}
-        <Button small variant="ghost" onClick={onRemove}>
+        <Button small variant="ghost" icon="trash" onClick={onRemove}>
           {t('workout.removeExercise')}
         </Button>
       </div>

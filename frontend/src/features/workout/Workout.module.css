@@ -1,143 +1,286 @@
 .header {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .header h1 {
   margin: 0 0 var(--space-1);
-  font-size: 1.25rem;
+  font-size: 1.4rem;
 }
 
 .meta {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+}
+
+/* Postęp całego treningu */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.progressTrack {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--info), var(--accent));
+  transition: width 0.4s var(--ease);
+}
+
+.progressText {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-muted);
 }
 
 .chips {
   display: flex;
   gap: var(--space-2);
   overflow-x: auto;
-  padding-bottom: var(--space-2);
-  margin-bottom: var(--space-3);
-  scrollbar-width: thin;
+  margin: 0 calc(-1 * var(--space-4)) var(--space-3);
+  padding: 2px var(--space-4) var(--space-2);
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
 }
 
 .chip {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 36px;
-  padding: 0 var(--space-3);
-  border-radius: 999px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: var(--surface);
+  color: var(--text-muted);
   font: inherit;
   font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
 }
 
 .chipActive {
   composes: chip;
-  border-color: var(--accent-text);
-  color: var(--accent-text);
-  font-weight: 600;
+  border-color: var(--text);
+  color: var(--text);
 }
 
 .chipDone {
   composes: chip;
-  background: var(--success-bg);
+  background: var(--accent-soft);
   border-color: transparent;
+  color: var(--accent-text);
 }
 
 .exercise {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
   margin-bottom: var(--space-3);
 }
 
 .exercise h2 {
-  margin: 0 0 var(--space-1);
+  margin: var(--space-1) 0 var(--space-1);
+  font-size: 1.35rem;
+}
+
+.overline {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.equipmentLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .photo {
   width: 100%;
-  max-height: 220px;
+  max-height: 200px;
   object-fit: cover;
   border-radius: var(--radius);
-  margin: var(--space-2) 0;
+  margin: var(--space-3) 0;
   background: var(--surface-2);
 }
 
-.target {
-  font-weight: 600;
-  margin: var(--space-2) 0 var(--space-1);
+.infoRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
 }
 
-.previous {
-  font-size: 0.9rem;
-  background: var(--surface-2);
+.infoBox {
+  padding: var(--space-3);
   border-radius: var(--radius);
-  padding: var(--space-2);
-  margin: var(--space-2) 0;
+  background: var(--surface-2);
+  min-width: 0;
 }
 
+.infoLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.infoValue {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.previousValue {
+  composes: infoValue;
+  color: var(--info);
+}
+
+.note {
+  margin: 0 0 var(--space-3);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Tabela serii */
 .sets {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 6px;
   margin: var(--space-2) 0;
 }
 
 .sets th {
-  text-align: left;
-  font-size: 0.8rem;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  font-weight: 500;
-  padding: 0 var(--space-1) var(--space-1);
+  padding: 0 4px;
 }
 
 .sets td {
-  padding: var(--space-1);
+  padding: 0 3px;
   vertical-align: middle;
 }
 
-.setDone td {
-  background: var(--success-bg);
+.setNumber {
+  width: 2.25rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text-muted);
 }
 
-.setNumber {
-  width: 2rem;
-  font-weight: 600;
-  text-align: center;
+.setDone .setNumber {
+  color: var(--accent-text);
 }
 
 .numInput {
   width: 100%;
   min-width: 0;
-  min-height: 48px;
+  min-height: 52px;
   padding: 0 var(--space-2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  font: inherit;
-  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.25rem;
+  font-weight: 600;
   text-align: center;
-  background: var(--surface);
+  color: var(--text);
+  background: var(--surface-2);
+  transition:
+    border-color 0.15s var(--ease),
+    background 0.15s var(--ease);
+}
+
+.numInput::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.numInput:focus {
+  outline: none;
+  border-color: var(--info);
+  box-shadow: 0 0 0 3px var(--info-soft);
+}
+
+.setDone .numInput {
+  background: var(--accent-soft);
+  border-color: transparent;
 }
 
 .check {
-  width: 52px;
-  height: 48px;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 52px;
   border-radius: var(--radius);
-  border: 2px solid var(--success);
-  background: var(--surface);
-  color: var(--success);
-  font-size: 1.4rem;
+  border: 2px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-muted);
   cursor: pointer;
+  transition:
+    background 0.15s var(--ease),
+    border-color 0.15s var(--ease),
+    transform 0.1s var(--ease);
+}
+
+.check:hover {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+.check:active {
+  transform: scale(0.94);
 }
 
 .checkDone {
   composes: check;
-  background: var(--success);
-  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  animation: pop 0.25s var(--ease);
+}
+
+.checkDone:hover {
+  color: var(--on-accent);
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.12);
+  }
 }
 
 .row {
@@ -148,41 +291,94 @@
 }
 
 .navRow {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-2);
   margin-bottom: var(--space-3);
 }
 
-.navRow > * {
-  flex: 1;
+.finishRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
 }
 
 /* Pasek timera przerwy – nad dolną nawigacją. */
 .timer {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: calc(56px + env(safe-area-inset-bottom));
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: calc(var(--nav-height) + var(--space-2) + env(safe-area-inset-bottom));
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: var(--text);
-  color: #fff;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--surface-3);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-2);
+  color: var(--text);
+  animation: slideUp 0.25s var(--ease);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
 }
 
 .timerDone {
-  composes: timer;
-  background: var(--success);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.timerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ring {
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg);
+}
+
+.ringTrack {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 4;
+}
+
+.ringValue {
+  fill: none;
+  stroke: var(--info);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.timerCaption {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .timerValue {
+  display: block;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
+  line-height: 1.1;
 }
 
 .timerButtons {
@@ -193,20 +389,31 @@
 .timerButton {
   min-height: var(--tap);
   padding: 0 var(--space-3);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
-  background: transparent;
-  color: #fff;
+  background: var(--surface);
+  color: inherit;
   font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
+}
+
+.timerDone .timerButton {
+  border-color: rgba(11, 15, 20, 0.3);
+  background: transparent;
 }
 
 @media (min-width: 768px) {
   .timer {
-    bottom: 0;
+    left: 50%;
+    right: auto;
+    width: min(520px, calc(100% - 32px));
+    translate: -50% 0;
+    bottom: var(--space-4);
   }
 }
 
 .spacer {
-  height: 72px;
+  height: 96px;
 }

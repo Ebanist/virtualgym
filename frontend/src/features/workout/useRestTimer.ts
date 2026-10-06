@@ -28,6 +28,8 @@ export function useRestTimer() {
   const [endAt, setEndAt] = useState<number | null>(readStored)
   const [now, setNow] = useState(() => Date.now())
   const [finished, setFinished] = useState(false)
+  // Pełna długość bieżącej przerwy (do wskaźnika postępu); po przeładowaniu = pozostały czas.
+  const [total, setTotal] = useState(() => (endAt ? Math.ceil((endAt - Date.now()) / 1000) : 0))
 
   useEffect(() => {
     if (!endAt) return
@@ -48,6 +50,7 @@ export function useRestTimer() {
   const start = useCallback((seconds: number) => {
     if (seconds <= 0) return
     const end = Date.now() + seconds * 1000
+    setTotal(seconds)
     setFinished(false)
     setNow(Date.now())
     setEndAt(end)
@@ -55,6 +58,7 @@ export function useRestTimer() {
   }, [])
 
   const addSeconds = useCallback((seconds: number) => {
+    setTotal((prev) => prev + seconds)
     setEndAt((prev) => {
       const end = (prev ?? Date.now()) + seconds * 1000
       store(end)
@@ -69,7 +73,7 @@ export function useRestTimer() {
   }, [])
 
   const remaining = endAt ? Math.max(0, Math.ceil((endAt - now) / 1000)) : 0
-  return { running: endAt !== null, remaining, finished, start, addSeconds, stop, dismiss: () => setFinished(false) }
+  return { running: endAt !== null, remaining, total, finished, start, addSeconds, stop, dismiss: () => setFinished(false) }
 }
 
 export function formatSeconds(total: number) {
