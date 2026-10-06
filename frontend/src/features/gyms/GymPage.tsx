@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { errorMessage } from '../../api/errors'
 import { useGym, useMembership } from '../../api/gyms'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
+import { buttonClass } from '../../components/buttonClass'
 import { Card } from '../../components/Card'
 import { GymEquipmentSection } from '../equipment/GymEquipmentSection'
 import styles from './Gyms.module.css'
@@ -42,6 +43,9 @@ export function GymPage() {
             {t('gyms.join')}
           </Button>
         )}
+        <Link to={`/gyms/${g.id}/exercises`} className={buttonClass()}>
+          {t('exercises.showAvailable')}
+        </Link>
       </div>
       {g.description && (
         <Card>

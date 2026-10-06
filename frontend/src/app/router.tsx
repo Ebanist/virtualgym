@@ -7,6 +7,9 @@ import { ResetPasswordPage } from '../features/auth/ResetPasswordPage'
 import { AddEquipmentPage } from '../features/equipment/AddEquipmentPage'
 import { EditEquipmentPage } from '../features/equipment/EditEquipmentPage'
 import { EquipmentPage } from '../features/equipment/EquipmentPage'
+import { AddCustomExercisePage } from '../features/exercises/AddCustomExercisePage'
+import { ExerciseLibraryPage } from '../features/exercises/ExerciseLibraryPage'
+import { GymExercisesPage } from '../features/exercises/GymExercisesPage'
 import { AddGymPage } from '../features/gyms/AddGymPage'
 import { GymPage } from '../features/gyms/GymPage'
 import { GymSearchPage } from '../features/gyms/GymSearchPage'
@@ -45,6 +48,9 @@ export const router = createBrowserRouter([
           { path: '/gyms/new', element: <AddGymPage /> },
           { path: '/gyms/:gymId', element: <GymPage /> },
           { path: '/gyms/:gymId/equipment/new', element: <AddEquipmentPage /> },
+          { path: '/gyms/:gymId/exercises', element: <GymExercisesPage /> },
+          { path: '/gyms/:gymId/exercises/new', element: <AddCustomExercisePage /> },
+          { path: '/exercises', element: <ExerciseLibraryPage /> },
           { path: '/equipment/:id', element: <EquipmentPage /> },
           { path: '/equipment/:id/edit', element: <EditEquipmentPage /> },
           { path: '/profile', element: <ProfilePage /> },

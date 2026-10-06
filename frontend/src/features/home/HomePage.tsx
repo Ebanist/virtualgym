@@ -21,6 +21,9 @@ export function HomePage() {
       <Link to="/gyms" className={buttonClass({ block: true })}>
         {t('home.findGym')}
       </Link>
+      <p>
+        <Link to="/exercises">{t('exercises.library')}</Link>
+      </p>
     </>
   )
 }

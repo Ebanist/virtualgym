@@ -40,6 +40,8 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - Tekst do wyszukiwania/duplikatów: `TextNormalizer.normalize` (małe litery, bez polskich znaków); w encji trzymamy
   kolumnę `normalized_*`, a podobieństwo liczymy przez `pg_trgm` (`similarity`).
 - Autoryzacja „tylko członkowie siłowni”: `GymAccessService.requireMember(userId, gymId)` → 403 `gym_membership_required`.
+- Dostępność ćwiczeń: zawsze przez `ExerciseService.catalog(gymId)` → `GymExerciseCatalog.isAvailable(exerciseId, equipmentId)`;
+  reguły tylko w `ExerciseAvailabilityResolver` (czysta klasa, testy jednostkowe).
 - Dane dev: `dev/DevDataSeeder` (profil `dev`) – rozszerzaj przy nowych modułach, seed działa tylko na pustej bazie.
 
 ## Testy backendu

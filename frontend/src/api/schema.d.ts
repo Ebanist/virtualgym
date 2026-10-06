@@ -22,6 +22,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/equipment/{equipmentId}/exercises/{exerciseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Powiązanie sprzętu z ćwiczeniem (idempotentne, członkowie) */
+        put: operations["link"];
+        post?: never;
+        delete: operations["unlink"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/reports/{reportId}/resolve": {
         parameters: {
             query?: never;
@@ -86,6 +103,23 @@ export interface paths {
         /** Dołączenie do siłowni (idempotentne) */
         post: operations["join"];
         delete: operations["leave"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gyms/{gymId}/exercises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Własne ćwiczenie przypisane do sprzętu siłowni (tylko członkowie) */
+        post: operations["createCustom"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -291,6 +325,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/gyms/{gymId}/exercises/available": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ćwiczenia możliwe do wykonania na sprzęcie siłowni (+ z masą ciała) wraz ze sprzętem */
+        get: operations["available"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/gyms/{gymId}/equipment/similar": {
         parameters: {
             query?: never;
@@ -357,6 +408,39 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/exercises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Biblioteka ćwiczeń: globalne + własne ćwiczenia moich siłowni */
+        get: operations["library"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/exercises/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/equipment/{id}/history": {
         parameters: {
             query?: never;
@@ -366,6 +450,23 @@ export interface paths {
         };
         /** Historia zmian sprzętu (od najnowszych) */
         get: operations["history"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/equipment/{equipmentId}/exercises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ćwiczenia na danym sprzęcie (dopasowanie po typie lub jawne powiązanie) */
+        get: operations["forEquipment"];
         put?: never;
         post?: never;
         delete?: never;
@@ -518,6 +619,31 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
         };
+        CreateExerciseRequest: {
+            name: string;
+            /** @enum {string} */
+            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            secondaryMuscles?: ("CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO")[];
+            description?: string;
+            bodyweight?: boolean;
+            equipmentIds?: string[];
+        };
+        ExerciseDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @enum {string} */
+            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            secondaryMuscles: ("CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO")[];
+            description?: string;
+            bodyweight: boolean;
+            /** @enum {string} */
+            scope: "GLOBAL" | "CUSTOM";
+            /** Format: uuid */
+            gymId?: string;
+            equipmentTypes: components["schemas"]["EquipmentTypeDto"][];
+            createdBy?: components["schemas"]["UserRefDto"];
+        };
         CreateEquipmentRequest: {
             name: string;
             /** @enum {string} */
@@ -579,6 +705,16 @@ export interface components {
             /** Format: int32 */
             totalPages: number;
         };
+        AvailableExerciseDto: {
+            exercise: components["schemas"]["ExerciseDto"];
+            equipment: components["schemas"]["EquipmentOptionDto"][];
+        };
+        EquipmentOptionDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            thumbnailUrl?: string;
+        };
         EquipmentSummaryDto: {
             /** Format: uuid */
             id: string;
@@ -631,6 +767,11 @@ export interface components {
             totalElements: number;
             /** Format: int32 */
             totalPages: number;
+        };
+        EquipmentExerciseDto: {
+            exercise: components["schemas"]["ExerciseDto"];
+            linked: boolean;
+            byType: boolean;
         };
     };
     responses: never;
@@ -695,6 +836,48 @@ export interface operations {
             header?: never;
             path: {
                 id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                equipmentId: string;
+                exerciseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unlink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                equipmentId: string;
+                exerciseId: string;
             };
             cookie?: never;
         };
@@ -845,6 +1028,32 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    createCustom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                gymId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExerciseRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseDto"];
+                };
             };
         };
     };
@@ -1199,6 +1408,31 @@ export interface operations {
             };
         };
     };
+    available: {
+        parameters: {
+            query?: {
+                q?: string;
+                muscle?: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            };
+            header?: never;
+            path: {
+                gymId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvailableExerciseDto"][];
+                };
+            };
+        };
+    };
     similar: {
         parameters: {
             query: {
@@ -1290,6 +1524,51 @@ export interface operations {
             };
         };
     };
+    library: {
+        parameters: {
+            query?: {
+                q?: string;
+                muscle?: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseDto"][];
+                };
+            };
+        };
+    };
+    get_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseDto"];
+                };
+            };
+        };
+    };
     history: {
         parameters: {
             query?: {
@@ -1311,6 +1590,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PageResponseEquipmentChangeDto"];
+                };
+            };
+        };
+    };
+    forEquipment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                equipmentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EquipmentExerciseDto"][];
                 };
             };
         };

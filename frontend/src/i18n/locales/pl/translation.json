@@ -17,7 +17,8 @@
     "edit": "Edytuj",
     "delete": "Usuń",
     "loadMore": "Pokaż więcej",
-    "back": "Wróć"
+    "back": "Wróć",
+    "close": "Zamknij"
   },
   "auth": {
     "email": "E-mail",
@@ -100,7 +101,9 @@
     "report_already_open": "Już zgłosiłeś ten problem.",
     "invalid_duplicate_reference": "Nieprawidłowo wskazany duplikat.",
     "equipment_type_not_found": "Nieznany typ sprzętu.",
-    "data_conflict": "Konflikt danych. Odśwież i spróbuj ponownie."
+    "data_conflict": "Konflikt danych. Odśwież i spróbuj ponownie.",
+    "exercise_equipment_required": "Wybierz sprzęt albo zaznacz ćwiczenie z masą ciała.",
+    "equipment_not_in_gym": "Wybrany sprzęt nie należy do tej siłowni."
   },
   "notFound": {
     "title": "Nie znaleziono strony",
@@ -216,5 +219,59 @@
       }
     },
     "typeShort": "Typ"
+  },
+  "muscles": {
+    "CHEST": "Klatka piersiowa",
+    "BACK": "Plecy",
+    "LOWER_BACK": "Dolny odcinek pleców",
+    "TRAPS": "Kaptury",
+    "SHOULDERS": "Barki",
+    "BICEPS": "Biceps",
+    "TRICEPS": "Triceps",
+    "FOREARMS": "Przedramiona",
+    "ABS": "Brzuch",
+    "OBLIQUES": "Mięśnie skośne",
+    "GLUTES": "Pośladki",
+    "QUADRICEPS": "Czworogłowe ud",
+    "HAMSTRINGS": "Dwugłowe ud",
+    "ADDUCTORS": "Przywodziciele",
+    "ABDUCTORS": "Odwodziciele",
+    "CALVES": "Łydki",
+    "FULL_BODY": "Całe ciało",
+    "CARDIO": "Cardio"
+  },
+  "exercises": {
+    "availableTitle": "Ćwiczenia w tej siłowni",
+    "availableIntro": "Ćwiczenia możliwe do wykonania na sprzęcie tej siłowni oraz z masą ciała.",
+    "libraryTitle": "Biblioteka ćwiczeń",
+    "search": "Szukaj ćwiczenia",
+    "muscle": "Partia mięśniowa",
+    "allMuscles": "Wszystkie partie",
+    "noResults": "Brak ćwiczeń spełniających kryteria.",
+    "onEquipment": "Sprzęt",
+    "bodyweight": "Masa ciała",
+    "custom": "Własne",
+    "addCustom": "Dodaj własne",
+    "addCustomTitle": "Własne ćwiczenie",
+    "addCustomIntro": "Ćwiczenie będzie widoczne dla wszystkich członków tej siłowni.",
+    "name": "Nazwa ćwiczenia",
+    "primaryMuscle": "Główna partia mięśniowa",
+    "chooseMuscle": "Wybierz partię",
+    "secondaryMuscles": "Partie dodatkowe",
+    "descriptionOptional": "Krótki opis (opcjonalnie)",
+    "bodyweightLabel": "Ćwiczenie z masą ciała (bez sprzętu)",
+    "equipment": "Sprzęt w siłowni, na którym wykonasz ćwiczenie",
+    "noEquipment": "W siłowni nie ma jeszcze sprzętu.",
+    "equipmentRequired": "Wybierz sprzęt albo zaznacz ćwiczenie z masą ciała.",
+    "save": "Zapisz ćwiczenie",
+    "onThisEquipment": "Ćwiczenia na tym sprzęcie",
+    "noneForEquipment": "Brak dopasowanych ćwiczeń. Ustaw typ sprzętu albo powiąż ćwiczenie ręcznie.",
+    "link": "Powiąż ćwiczenie",
+    "linkThis": "Powiąż",
+    "unlink": "Usuń powiązanie",
+    "linkedManually": "powiązane ręcznie",
+    "searchToLink": "Wyszukaj ćwiczenie w bibliotece",
+    "showAvailable": "Ćwiczenia dostępne w tej siłowni",
+    "library": "Biblioteka ćwiczeń"
   }
 }

@@ -14,6 +14,7 @@ import { Button } from '../../components/Button'
 import { buttonClass } from '../../components/buttonClass'
 import { Card } from '../../components/Card'
 import styles from './Equipment.module.css'
+import { EquipmentExercisesSection } from './EquipmentExercisesSection'
 import { HistorySection } from './HistorySection'
 import { PhotoInput } from './PhotoInput'
 import { ReportsSection } from './ReportsSection'
@@ -64,6 +65,7 @@ export function EquipmentPage() {
         </dl>
       </Card>
       {e.member && <MemberActions equipment={e} />}
+      <EquipmentExercisesSection equipment={e} />
       <ReportsSection equipment={e} />
       <HistorySection equipmentId={e.id} />
     </>

@@ -12,7 +12,7 @@ Plan MVP (model danych, endpointy, etapy): [`docs/PLAN.md`](docs/PLAN.md).
 | 1 | Szkielet monorepo, docker-compose, konfiguracja, auth | ✅ |
 | 2 | Siłownie i członkostwo | ✅ |
 | 3 | Sprzęt (zdjęcia, historia zmian, zgłoszenia) | ✅ |
-| 4 | Ćwiczenia i powiązania ze sprzętem | ⏳ |
+| 4 | Ćwiczenia i powiązania ze sprzętem | ✅ |
 | 5 | Planer treningowy | ⏳ |
 | 6 | Tryb treningu i historia | ⏳ |
 
@@ -88,6 +88,9 @@ docker-compose.yml   PostgreSQL 16
 - `storage/` – interfejs `FileStorage` (implementacja `LocalFileStorage`, docelowo S3/MinIO), walidacja zdjęć
   po sygnaturze pliku (jpg/png/webp, maks. 5 MB, maks. 8000 px), miniatury 320 px (Thumbnailator, JPEG).
   Pliki serwowane publicznie przez `GET /api/v1/files/{id}` i `/thumbnail` (cache 1 rok).
+- `exercise/` – biblioteka 67 ćwiczeń (seed w migracji V4), własne ćwiczenia siłowni, powiązania sprzęt↔ćwiczenie.
+  Logika „co da się zrobić w tej siłowni” w czystej klasie `ExerciseAvailabilityResolver` (testy jednostkowe):
+  ćwiczenie z masą ciała – zawsze; inaczej potrzebny dostępny sprzęt o wymaganym typie albo jawne powiązanie.
 - `common/` – obsługa błędów (ProblemDetail, RFC 7807), `PageResponse`, `BaseEntity` (UUID + audyt), normalizacja tekstu.
 - Baza: PostgreSQL 16, migracje **Flyway** (`src/main/resources/db/migration`), Hibernate w trybie `validate`.
 - Dokumentacja API: springdoc-openapi → `/v3/api-docs`, Swagger UI → `/swagger-ui.html`.
