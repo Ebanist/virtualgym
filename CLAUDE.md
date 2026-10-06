@@ -22,7 +22,8 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - Warstwy: controller (HTTP, walidacja `@Valid`, mapowanie na DTO) → service (logika, `@Transactional`) → repository.
   Kontroler nie dotyka repozytoriów; encje nie wychodzą poza serwis (zawsze DTO, mapowanie ręczne `XDto.from(entity)`).
 - DTO jako `record`. Pola odpowiedzi opcjonalne oznaczaj `@Schema(nullable = true)` (inaczej w TS są wymagane –
-  patrz `OpenApiConfig`). Nazwy schematów odpowiedzi kończą się na `Dto` lub `Response`.
+  `OpenApiConfig` czyta tę adnotację z rekordów). Nazwy schematów odpowiedzi kończą się na `Dto` lub `Response`.
+  Specyfikacja w wersji OpenAPI 3.0 (`springdoc.api-docs.version`).
 - Encje dziedziczą po `BaseEntity` (UUID, `createdAt`, `updatedAt`). Schemat wyłącznie przez Flyway
   (`V<n>__opis.sql`), Hibernate `ddl-auto=validate`. Nigdy nie edytuj zastosowanej migracji – dodaj nową.
 - Błędy: rzucaj wyjątki z `common.error` (`NotFoundException` 404, `ForbiddenException` 403, `ConflictException` 409,
@@ -31,7 +32,10 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - Zalogowany użytkownik: parametr `AuthUser authUser` w metodzie kontrolera (resolver z JWT).
 - Zasób cudzy/niedostępny (np. plan innego użytkownika) → 404, nie 403 (nie ujawniamy istnienia).
 - Listy paginowane zwracają `PageResponse<T>` (`page` od 0, `size`, `totalElements`, `totalPages`).
-- Soft delete: kolumna `deleted_at` (sprzęt, plany).
+- Soft delete: kolumna `deleted_at` (sprzęt, plany). Bez `@SQLRestriction` – filtrujemy jawnie w zapytaniach
+  (`findActiveById`, `deletedAt is null`), bo plany muszą nadal widzieć usunięty sprzęt.
+- Edycja współdzielonych zasobów (sprzęt): `@Version` + `version` w żądaniu → 409 `concurrent_modification`.
+- Historia zmian sprzętu: `EquipmentChange` z diffem pól w JSONB (`FieldChange{oldValue,newValue}`), zapisywana w serwisie.
 - Czas: `Instant` + `TIMESTAMPTZ`, bieżący czas z wstrzykiwanego `Clock`.
 - Tekst do wyszukiwania/duplikatów: `TextNormalizer.normalize` (małe litery, bez polskich znaków); w encji trzymamy
   kolumnę `normalized_*`, a podobieństwo liczymy przez `pg_trgm` (`similarity`).

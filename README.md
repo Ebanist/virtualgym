@@ -11,7 +11,7 @@ Plan MVP (model danych, endpointy, etapy): [`docs/PLAN.md`](docs/PLAN.md).
 |------|--------|------|
 | 1 | Szkielet monorepo, docker-compose, konfiguracja, auth | ✅ |
 | 2 | Siłownie i członkostwo | ✅ |
-| 3 | Sprzęt (zdjęcia, historia zmian, zgłoszenia) | ⏳ |
+| 3 | Sprzęt (zdjęcia, historia zmian, zgłoszenia) | ✅ |
 | 4 | Ćwiczenia i powiązania ze sprzętem | ⏳ |
 | 5 | Planer treningowy | ⏳ |
 | 6 | Tryb treningu i historia | ⏳ |
@@ -47,6 +47,8 @@ Otwórz http://localhost:5173 i zaloguj się kontem testowym albo załóż nowe.
 | `anna@example.com` | `Password123` | Fitness Arena Centrum (Warszawa) |
 | `jan@example.com` | `Password123` | Fitness Arena Centrum, Iron Gym Kazimierz (Kraków) |
 
+Seed zawiera też 21 sztuk sprzętu (15 w Fitness Arena – w tym „Suwnica Smitha” oznaczona jako usunięta z siłowni, 6 w Iron Gym).
+
 Reset bazy: `docker compose down -v && docker compose up -d`.
 
 **Reset hasła:** w MVP nie wysyłamy e-maili – link do resetu pojawia się w logach backendu
@@ -61,6 +63,7 @@ Reset bazy: `docker compose down -v && docker compose up -d`.
 | `SECURE_COOKIE` | `false` | Flaga `Secure` ciasteczka refresh (ustaw `true` za HTTPS) |
 | `FRONTEND_URL` | `http://localhost:5173` | Baza linków (np. reset hasła) |
 | `CORS_ORIGINS` | `http://localhost:5173` | Dozwolone originy (gdy front nie idzie przez proxy) |
+| `STORAGE_DIR` | `./uploads` | Katalog na zdjęcia (`LocalFileStorage`) |
 
 ## Testy
 
@@ -82,6 +85,9 @@ docker-compose.yml   PostgreSQL 16
 
 - Pakiety per moduł domenowy (`auth`, `user`, kolejne: `gym`, `equipment`, `exercise`, `plan`, `workout`),
   w każdym warstwy **controller → service → repository**, DTO (`dto/`) oddzielone od encji.
+- `storage/` – interfejs `FileStorage` (implementacja `LocalFileStorage`, docelowo S3/MinIO), walidacja zdjęć
+  po sygnaturze pliku (jpg/png/webp, maks. 5 MB, maks. 8000 px), miniatury 320 px (Thumbnailator, JPEG).
+  Pliki serwowane publicznie przez `GET /api/v1/files/{id}` i `/thumbnail` (cache 1 rok).
 - `common/` – obsługa błędów (ProblemDetail, RFC 7807), `PageResponse`, `BaseEntity` (UUID + audyt), normalizacja tekstu.
 - Baza: PostgreSQL 16, migracje **Flyway** (`src/main/resources/db/migration`), Hibernate w trybie `validate`.
 - Dokumentacja API: springdoc-openapi → `/v3/api-docs`, Swagger UI → `/swagger-ui.html`.

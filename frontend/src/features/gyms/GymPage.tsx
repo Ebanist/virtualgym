@@ -5,6 +5,7 @@ import { useGym, useMembership } from '../../api/gyms'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
+import { GymEquipmentSection } from '../equipment/GymEquipmentSection'
 import styles from './Gyms.module.css'
 
 export function GymPage() {
@@ -47,6 +48,7 @@ export function GymPage() {
           <p className={styles.description}>{g.description}</p>
         </Card>
       )}
+      <GymEquipmentSection gymId={g.id} member={g.member} />
     </>
   )
 }

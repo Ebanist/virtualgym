@@ -1,6 +1,8 @@
 app:
   jwt:
     refresh-reuse-grace: 0s
+  storage:
+    local-dir: target/test-uploads
 
 logging:
   level:

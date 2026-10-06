@@ -13,7 +13,11 @@
   "common": {
     "save": "Zapisz",
     "cancel": "Anuluj",
-    "saved": "Zapisano zmiany."
+    "saved": "Zapisano zmiany.",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "loadMore": "Pokaż więcej",
+    "back": "Wróć"
   },
   "auth": {
     "email": "E-mail",
@@ -87,7 +91,16 @@
     "reset_token_invalid": "Link do resetu hasła jest nieprawidłowy lub wygasł.",
     "concurrent_modification": "Ktoś inny zmienił te dane. Odśwież i spróbuj ponownie.",
     "gym_membership_required": "Tylko członkowie siłowni mogą to zrobić. Dołącz do siłowni.",
-    "invalid_sort": "Nieprawidłowe sortowanie."
+    "invalid_sort": "Nieprawidłowe sortowanie.",
+    "file_too_large": "Plik jest za duży (maks. 5 MB).",
+    "unsupported_file_type": "Dozwolone formaty: JPG, PNG, WebP.",
+    "invalid_image": "Plik nie jest poprawnym obrazem.",
+    "image_too_large": "Obraz ma zbyt duże wymiary.",
+    "file_empty": "Plik jest pusty.",
+    "report_already_open": "Już zgłosiłeś ten problem.",
+    "invalid_duplicate_reference": "Nieprawidłowo wskazany duplikat.",
+    "equipment_type_not_found": "Nieznany typ sprzętu.",
+    "data_conflict": "Konflikt danych. Odśwież i spróbuj ponownie."
   },
   "notFound": {
     "title": "Nie znaleziono strony",
@@ -116,5 +129,92 @@
     "leave": "Opuść siłownię",
     "leaveConfirm": "Na pewno opuścić tę siłownię?",
     "members": "członkowie: {{count}}"
+  },
+  "equipment": {
+    "title": "Sprzęt",
+    "add": "Dodaj sprzęt",
+    "addTitle": "Nowy sprzęt",
+    "editTitle": "Edycja sprzętu",
+    "search": "Szukaj sprzętu",
+    "categoryLabel": "Kategoria",
+    "allCategories": "Wszystkie kategorie",
+    "chooseCategory": "Wybierz kategorię",
+    "name": "Nazwa",
+    "type": "Typ sprzętu (do dopasowania ćwiczeń)",
+    "noType": "— brak / inny —",
+    "quantity": "Liczba sztuk (opcjonalnie)",
+    "quantityShort": "{{count}} szt.",
+    "description": "Opis",
+    "descriptionOptional": "Opis (opcjonalnie)",
+    "statusLabel": "Status",
+    "addedBy": "Dodał(a)",
+    "empty": "W tej siłowni nie dodano jeszcze sprzętu.",
+    "emptyMember": "Brak sprzętu. Dodaj pierwszy – pomożesz innym członkom!",
+    "similarHint": "Podobny sprzęt już jest w tej siłowni – sprawdź, czy to nie ten sam:",
+    "openReports": "zgłoszenia: {{count}}",
+    "photo": "Zdjęcie",
+    "photoOptional": "Zdjęcie (opcjonalnie)",
+    "photoHint": "JPG, PNG lub WebP, maks. 5 MB.",
+    "addPhoto": "Dodaj zdjęcie",
+    "changePhoto": "Zmień zdjęcie",
+    "uploadPhoto": "Wyślij zdjęcie",
+    "uploading": "Wysyłanie…",
+    "markRemoved": "Oznacz jako usunięty z siłowni",
+    "markActive": "Przywróć (jest w siłowni)",
+    "markRemovedConfirm": "Oznaczyć sprzęt jako usunięty z siłowni? Plany korzystające z niego dostaną ostrzeżenie.",
+    "deleteConfirm": "Usunąć ten wpis sprzętu? Użyj tego dla błędnych wpisów – jeśli sprzęt zniknął z siłowni, oznacz go jako usunięty.",
+    "removedInfo": "Ten sprzęt został oznaczony jako usunięty z siłowni.",
+    "joinToEdit": "Dołącz do siłowni, aby edytować sprzęt i zgłaszać problemy.",
+    "category": {
+      "STRENGTH_MACHINE": "Maszyna siłowa",
+      "CABLE": "Wyciąg",
+      "FREE_WEIGHTS": "Wolne ciężary",
+      "BENCH": "Ławka",
+      "CARDIO": "Cardio",
+      "FUNCTIONAL": "Sprzęt funkcjonalny",
+      "OTHER": "Inne"
+    },
+    "status": {
+      "ACTIVE": "Dostępny",
+      "REMOVED_FROM_GYM": "Usunięty z siłowni"
+    },
+    "fields": {
+      "name": "Nazwa",
+      "category": "Kategoria",
+      "equipmentType": "Typ",
+      "description": "Opis",
+      "quantity": "Liczba sztuk",
+      "status": "Status",
+      "photo": "Zdjęcie"
+    },
+    "history": {
+      "title": "Historia zmian",
+      "type": {
+        "CREATED": "dodanie",
+        "UPDATED": "edycja",
+        "STATUS_CHANGED": "zmiana statusu",
+        "PHOTO_CHANGED": "nowe zdjęcie",
+        "DELETED": "usunięcie"
+      }
+    },
+    "reports": {
+      "title": "Zgłoszenia",
+      "add": "Zgłoś problem",
+      "empty": "Brak zgłoszeń.",
+      "typeLabel": "Rodzaj problemu",
+      "comment": "Komentarz (opcjonalnie)",
+      "submit": "Wyślij zgłoszenie",
+      "resolve": "Oznacz jako rozwiązane",
+      "resolved": "rozwiązane",
+      "duplicateOf": "Duplikat sprzętu",
+      "chooseDuplicate": "— wskaż oryginał (opcjonalnie) —",
+      "removedHint": "Jeśli jesteś pewien, że sprzętu nie ma, możesz też od razu oznaczyć go jako usunięty z siłowni.",
+      "type": {
+        "DUPLICATE": "Duplikat",
+        "WRONG_DATA": "Błędne dane",
+        "REMOVED_FROM_GYM": "Sprzęt usunięty z siłowni"
+      }
+    },
+    "typeShort": "Typ"
   }
 }

@@ -35,6 +35,9 @@ server:
     include-stacktrace: never
 
 springdoc:
+  api-docs:
+    # 3.0: pola opcjonalne jako `nullable: true` (patrz OpenApiConfig) – prostsze typy w openapi-typescript.
+    version: openapi_3_0
   swagger-ui:
     path: /swagger-ui.html
   default-produces-media-type: application/json
@@ -50,5 +53,10 @@ app:
     refresh-reuse-grace: 30s
     password-reset-ttl: 1h
     secure-cookie: ${SECURE_COOKIE:false}
+  storage:
+    local-dir: ${STORAGE_DIR:./uploads}
+    max-file-size: 5MB
+    thumbnail-size: 320
+    max-image-dimension: 8000
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
