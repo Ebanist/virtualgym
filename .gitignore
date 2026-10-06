@@ -1,0 +1,18 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Backend
+backend/target/
+backend/uploads/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+*.local
+
+# Env
+.env

@@ -1,0 +1,91 @@
+{
+  "app": {
+    "name": "GymPlanner",
+    "loading": "Ładowanie…"
+  },
+  "nav": {
+    "home": "Start",
+    "profile": "Profil",
+    "logout": "Wyloguj",
+    "menu": "Menu"
+  },
+  "common": {
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "saved": "Zapisano zmiany."
+  },
+  "auth": {
+    "email": "E-mail",
+    "password": "Hasło",
+    "displayName": "Nazwa wyświetlana",
+    "login": {
+      "title": "Zaloguj się",
+      "submit": "Zaloguj",
+      "noAccount": "Nie masz konta?",
+      "register": "Zarejestruj się",
+      "forgot": "Nie pamiętasz hasła?"
+    },
+    "register": {
+      "title": "Załóż konto",
+      "submit": "Zarejestruj",
+      "hasAccount": "Masz już konto?",
+      "login": "Zaloguj się",
+      "passwordHint": "Min. 8 znaków, co najmniej jedna litera i jedna cyfra."
+    },
+    "forgot": {
+      "title": "Reset hasła",
+      "intro": "Podaj e-mail konta. Wyślemy link do ustawienia nowego hasła.",
+      "submit": "Wyślij link",
+      "sent": "Jeśli konto istnieje, link do resetu został wysłany. (W wersji deweloperskiej link pojawia się w logach backendu.)",
+      "back": "Wróć do logowania"
+    },
+    "reset": {
+      "title": "Ustaw nowe hasło",
+      "newPassword": "Nowe hasło",
+      "confirmPassword": "Powtórz hasło",
+      "submit": "Ustaw hasło",
+      "done": "Hasło zostało zmienione. Możesz się zalogować.",
+      "missingToken": "Brak tokenu w linku. Poproś o nowy link do resetu hasła."
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "details": "Dane konta",
+    "changePassword": "Zmiana hasła",
+    "currentPassword": "Obecne hasło",
+    "newPassword": "Nowe hasło",
+    "confirmPassword": "Powtórz nowe hasło",
+    "passwordChanged": "Hasło zostało zmienione. Inne sesje zostały wylogowane."
+  },
+  "home": {
+    "greeting": "Cześć, {{name}}!",
+    "intro": "Wybierz siłownię i ułóż plan treningowy na dostępnym w niej sprzęcie."
+  },
+  "validation": {
+    "required": "To pole jest wymagane.",
+    "email": "Podaj poprawny adres e-mail.",
+    "length": "Nieprawidłowa długość.",
+    "minLength": "Minimum {{count}} znaków.",
+    "maxLength": "Maksymalnie {{count}} znaków.",
+    "password": "Hasło musi mieć min. 8 znaków, literę i cyfrę.",
+    "passwordMismatch": "Hasła nie są takie same.",
+    "invalid": "Nieprawidłowa wartość."
+  },
+  "errors": {
+    "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+    "network": "Brak połączenia z serwerem.",
+    "not_found": "Nie znaleziono.",
+    "forbidden": "Brak uprawnień do tej operacji.",
+    "unauthorized": "Sesja wygasła. Zaloguj się ponownie.",
+    "validation_failed": "Popraw błędy w formularzu.",
+    "email_taken": "Ten e-mail jest już zarejestrowany.",
+    "invalid_credentials": "Nieprawidłowy e-mail lub hasło.",
+    "invalid_current_password": "Obecne hasło jest nieprawidłowe.",
+    "reset_token_invalid": "Link do resetu hasła jest nieprawidłowy lub wygasł.",
+    "concurrent_modification": "Ktoś inny zmienił te dane. Odśwież i spróbuj ponownie."
+  },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "back": "Wróć na start"
+  }
+}

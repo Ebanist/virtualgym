@@ -1,0 +1,8 @@
+app:
+  jwt:
+    refresh-reuse-grace: 0s
+
+logging:
+  level:
+    org.testcontainers: WARN
+    com.github.dockerjava: WARN
