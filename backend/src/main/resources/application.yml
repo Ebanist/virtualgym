@@ -22,6 +22,10 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 6MB
+  data:
+    web:
+      pageable:
+        max-page-size: 100
   jackson:
     default-property-inclusion: non_null
 

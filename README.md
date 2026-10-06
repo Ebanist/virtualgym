@@ -10,7 +10,7 @@ Plan MVP (model danych, endpointy, etapy): [`docs/PLAN.md`](docs/PLAN.md).
 | Etap | Zakres | Stan |
 |------|--------|------|
 | 1 | Szkielet monorepo, docker-compose, konfiguracja, auth | ✅ |
-| 2 | Siłownie i członkostwo | ⏳ |
+| 2 | Siłownie i członkostwo | ✅ |
 | 3 | Sprzęt (zdjęcia, historia zmian, zgłoszenia) | ⏳ |
 | 4 | Ćwiczenia i powiązania ze sprzętem | ⏳ |
 | 5 | Planer treningowy | ⏳ |
@@ -30,7 +30,7 @@ docker compose up -d
 
 # 2. Backend (http://localhost:8080, Swagger UI: http://localhost:8080/swagger-ui.html)
 cd backend
-./mvnw spring-boot:run
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev   # profil dev = dane testowe
 
 # 3. Frontend (http://localhost:5173, proxy /api -> :8080)
 cd frontend
@@ -38,7 +38,16 @@ npm install
 npm run dev
 ```
 
-Otwórz http://localhost:5173 i załóż konto.
+Otwórz http://localhost:5173 i zaloguj się kontem testowym albo załóż nowe.
+
+**Dane testowe (profil `dev`, tylko na pustej bazie):**
+
+| E-mail | Hasło | Siłownie |
+|--------|-------|----------|
+| `anna@example.com` | `Password123` | Fitness Arena Centrum (Warszawa) |
+| `jan@example.com` | `Password123` | Fitness Arena Centrum, Iron Gym Kazimierz (Kraków) |
+
+Reset bazy: `docker compose down -v && docker compose up -d`.
 
 **Reset hasła:** w MVP nie wysyłamy e-maili – link do resetu pojawia się w logach backendu
 (`Password reset link for ...`).

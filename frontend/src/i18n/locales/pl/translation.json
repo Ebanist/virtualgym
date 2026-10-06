@@ -7,7 +7,8 @@
     "home": "Start",
     "profile": "Profil",
     "logout": "Wyloguj",
-    "menu": "Menu"
+    "menu": "Menu",
+    "gyms": "Siłownie"
   },
   "common": {
     "save": "Zapisz",
@@ -59,7 +60,9 @@
   },
   "home": {
     "greeting": "Cześć, {{name}}!",
-    "intro": "Wybierz siłownię i ułóż plan treningowy na dostępnym w niej sprzęcie."
+    "myGyms": "Moje siłownie",
+    "noGyms": "Nie należysz jeszcze do żadnej siłowni. Znajdź swoją i dołącz, aby widzieć sprzęt i układać plany.",
+    "findGym": "Znajdź lub dodaj siłownię"
   },
   "validation": {
     "required": "To pole jest wymagane.",
@@ -82,10 +85,36 @@
     "invalid_credentials": "Nieprawidłowy e-mail lub hasło.",
     "invalid_current_password": "Obecne hasło jest nieprawidłowe.",
     "reset_token_invalid": "Link do resetu hasła jest nieprawidłowy lub wygasł.",
-    "concurrent_modification": "Ktoś inny zmienił te dane. Odśwież i spróbuj ponownie."
+    "concurrent_modification": "Ktoś inny zmienił te dane. Odśwież i spróbuj ponownie.",
+    "gym_membership_required": "Tylko członkowie siłowni mogą to zrobić. Dołącz do siłowni.",
+    "invalid_sort": "Nieprawidłowe sortowanie."
   },
   "notFound": {
     "title": "Nie znaleziono strony",
     "back": "Wróć na start"
+  },
+  "pagination": {
+    "label": "Stronicowanie",
+    "prev": "Poprzednia",
+    "next": "Następna",
+    "info": "Strona {{page}} z {{total}}"
+  },
+  "gyms": {
+    "searchTitle": "Siłownie",
+    "add": "Dodaj siłownię",
+    "addTitle": "Nowa siłownia",
+    "name": "Nazwa",
+    "city": "Miasto",
+    "address": "Adres",
+    "descriptionOptional": "Opis (opcjonalnie)",
+    "noResults": "Brak siłowni spełniających kryteria. Możesz dodać nową.",
+    "memberBadge": "Należysz",
+    "similarHint": "Podobne siłownie w tym mieście – sprawdź, czy Twojej nie ma już na liście:",
+    "duplicateWarning": "W tym mieście istnieje siłownia o podobnej nazwie. Upewnij się, że to nie ta sama – jeśli tak, dołącz do istniejącej.",
+    "addAnyway": "To inna siłownia – dodaj mimo to",
+    "join": "Dołącz do siłowni",
+    "leave": "Opuść siłownię",
+    "leaveConfirm": "Na pewno opuścić tę siłownię?",
+    "members": "członkowie: {{count}}"
   }
 }

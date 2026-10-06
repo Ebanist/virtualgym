@@ -4,6 +4,9 @@ import { ForgotPasswordPage } from '../features/auth/ForgotPasswordPage'
 import { LoginPage } from '../features/auth/LoginPage'
 import { RegisterPage } from '../features/auth/RegisterPage'
 import { ResetPasswordPage } from '../features/auth/ResetPasswordPage'
+import { AddGymPage } from '../features/gyms/AddGymPage'
+import { GymPage } from '../features/gyms/GymPage'
+import { GymSearchPage } from '../features/gyms/GymSearchPage'
 import { HomePage } from '../features/home/HomePage'
 import { NotFoundPage } from '../features/home/NotFoundPage'
 import { ProfilePage } from '../features/profile/ProfilePage'
@@ -35,6 +38,9 @@ export const router = createBrowserRouter([
         element: <Layout />,
         children: [
           { path: '/', element: <HomePage /> },
+          { path: '/gyms', element: <GymSearchPage /> },
+          { path: '/gyms/new', element: <AddGymPage /> },
+          { path: '/gyms/:gymId', element: <GymPage /> },
           { path: '/profile', element: <ProfilePage /> },
           { path: '*', element: <NotFoundPage /> },
         ],

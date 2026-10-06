@@ -7,7 +7,7 @@ Plan MVP i etapy: `docs/PLAN.md`. Uruchomienie i architektura: `README.md`.
 
 ```bash
 docker compose up -d                         # Postgres na :5432
-cd backend && ./mvnw spring-boot:run         # API na :8080
+cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev   # API na :8080 + seed (DevDataSeeder)
 cd backend && ./mvnw verify                  # testy (Testcontainers – wymaga Dockera)
 cd frontend && npm run dev                   # :5173, proxy /api -> :8080
 cd frontend && npm run lint && npm run typecheck && npm test && npm run build
@@ -33,7 +33,10 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - Listy paginowane zwracają `PageResponse<T>` (`page` od 0, `size`, `totalElements`, `totalPages`).
 - Soft delete: kolumna `deleted_at` (sprzęt, plany).
 - Czas: `Instant` + `TIMESTAMPTZ`, bieżący czas z wstrzykiwanego `Clock`.
-- Tekst do wyszukiwania/duplikatów: `TextNormalizer.normalize` (małe litery, bez polskich znaków).
+- Tekst do wyszukiwania/duplikatów: `TextNormalizer.normalize` (małe litery, bez polskich znaków); w encji trzymamy
+  kolumnę `normalized_*`, a podobieństwo liczymy przez `pg_trgm` (`similarity`).
+- Autoryzacja „tylko członkowie siłowni”: `GymAccessService.requireMember(userId, gymId)` → 403 `gym_membership_required`.
+- Dane dev: `dev/DevDataSeeder` (profil `dev`) – rozszerzaj przy nowych modułach, seed działa tylko na pustej bazie.
 
 ## Testy backendu
 
@@ -62,6 +65,10 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - **Własne ćwiczenia** widoczne dla wszystkich członków siłowni, w której je dodano.
 - **Sprzęt „usunięty z siłowni”** ustawia ręcznie dowolny członek (historia zmian); zgłoszenia są informacyjne.
 - **Trening**: z dnia planu lub ad hoc.
+- **Duplikaty siłowni**: `POST /gyms` zwraca 409 `gym_possible_duplicate` z `candidates`, gdy w tym samym mieście jest
+  podobna nazwa (trigramy ≥ 0.4 lub zawieranie się nazw); klient ponawia z `confirmDuplicate=true`. Autor siłowni
+  automatycznie zostaje jej członkiem.
+- **Nawigacja**: na telefonie dolny pasek (fixed), od 768px w nagłówku.
 - **Wersja płatna**: tylko pola w modelu (`Gym.claimedByOrganizationId/status`, `Equipment.source/verified`,
   `WorkoutPlan.visibility/authorTrainerId`, role `GYM_ADMIN`/`TRAINER`) – bez logiki.
 - Zdjęcia `GET /api/v1/files/**` są publiczne (ładowane przez `<img>`), identyfikatory to losowe UUID.

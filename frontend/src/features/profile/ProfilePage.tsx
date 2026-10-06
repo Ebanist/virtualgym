@@ -18,6 +18,7 @@ export function ProfilePage() {
       <h1>{t('profile.title')}</h1>
       <ProfileDetails />
       <ChangePassword />
+      <Logout />
     </>
   )
 }
@@ -115,5 +116,15 @@ function ChangePassword() {
         </Button>
       </form>
     </Card>
+  )
+}
+
+function Logout() {
+  const { t } = useTranslation()
+  const { logout } = useAuth()
+  return (
+    <Button variant="danger" block onClick={() => void logout()}>
+      {t('nav.logout')}
+    </Button>
   )
 }
