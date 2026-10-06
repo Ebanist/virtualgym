@@ -15,6 +15,7 @@ cd frontend && npm run gen:api               # typy TS z backend/target/openapi.
 ```
 
 Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test + build muszą przechodzić.
+Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
 
 ## Backend – konwencje
 
@@ -43,6 +44,9 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - Dostępność ćwiczeń: zawsze przez `ExerciseService.catalog(gymId)` → `GymExerciseCatalog.isAvailable(exerciseId, equipmentId)`;
   reguły tylko w `ExerciseAvailabilityResolver` (czysta klasa, testy jednostkowe).
 - Plany: dostęp tylko właściciela przez `PlanService.getOwned` (cudzy/usunięty → 404); tworzenie wymaga członkostwa.
+- Trening: maks. jeden `IN_PROGRESS` na użytkownika (409 `session_already_active` z `activeSessionId`);
+  modyfikacje tylko trwającego treningu (422 `session_not_active`). Timer przerwy po stronie klienta
+  (`useRestTimer` – znacznik końca w localStorage).
 - Dane dev: `dev/DevDataSeeder` (profil `dev`) – rozszerzaj przy nowych modułach, seed działa tylko na pustej bazie.
 
 ## Testy backendu

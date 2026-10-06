@@ -7,6 +7,7 @@ import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { buttonClass } from '../../components/buttonClass'
 import { TextField } from '../../components/TextField'
+import { useStartWorkout } from '../workout/useStartWorkout'
 import { PlanItemRow } from './PlanItemRow'
 import styles from './Plans.module.css'
 
@@ -107,7 +108,8 @@ function DaySection({ plan, day, isFirst, isLast }: { plan: Plan; day: PlanDay; 
     planActions.moveItem(plan.id, itemId, direction),
   )
   const removeItem = usePlanMutation((itemId: string) => planActions.deleteItem(plan.id, itemId))
-  const error = rename.error ?? move.error ?? remove.error ?? moveItem.error ?? removeItem.error
+  const start = useStartWorkout()
+  const error = rename.error ?? move.error ?? remove.error ?? moveItem.error ?? removeItem.error ?? start.error
 
   return (
     <section className={styles.day} aria-label={day.name}>
@@ -157,8 +159,15 @@ function DaySection({ plan, day, isFirst, isLast }: { plan: Plan; day: PlanDay; 
           />
         ))}
       </ol>
+      {day.items.length > 0 && !plan.archived && (
+        <div className={styles.dayFooter}>
+          <Button variant="primary" block disabled={start.isPending} onClick={() => void start.run({ planId: plan.id, planDayId: day.id })}>
+            ▶ {t('workout.startDay')}
+          </Button>
+        </div>
+      )}
       <div className={`${styles.dayFooter} ${styles.actions}`}>
-        <Link to={`/plans/${plan.id}/days/${day.id}/add`} className={buttonClass({ variant: 'primary', small: true })}>
+        <Link to={`/plans/${plan.id}/days/${day.id}/add`} className={buttonClass({ small: true })}>
           {t('plans.addExercise')}
         </Link>
         {!renaming && (

@@ -13,6 +13,8 @@ import { GymExercisesPage } from '../features/exercises/GymExercisesPage'
 import { AddGymPage } from '../features/gyms/AddGymPage'
 import { GymPage } from '../features/gyms/GymPage'
 import { GymSearchPage } from '../features/gyms/GymSearchPage'
+import { HistoryPage } from '../features/history/HistoryPage'
+import { SessionDetailPage } from '../features/history/SessionDetailPage'
 import { HomePage } from '../features/home/HomePage'
 import { NotFoundPage } from '../features/home/NotFoundPage'
 import { AddPlanItemPage } from '../features/plans/AddPlanItemPage'
@@ -21,6 +23,7 @@ import { NewPlanPage } from '../features/plans/NewPlanPage'
 import { PlanPage } from '../features/plans/PlanPage'
 import { PlansPage } from '../features/plans/PlansPage'
 import { ProfilePage } from '../features/profile/ProfilePage'
+import { WorkoutPage } from '../features/workout/WorkoutPage'
 import { PublicOnly, RequireAuth } from './RouteGuards'
 
 export const router = createBrowserRouter([
@@ -63,6 +66,9 @@ export const router = createBrowserRouter([
           { path: '/plans/:planId', element: <PlanPage /> },
           { path: '/plans/:planId/days/:dayId/add', element: <AddPlanItemPage /> },
           { path: '/plans/:planId/items/:itemId/edit', element: <EditPlanItemPage /> },
+          { path: '/workout/:sessionId', element: <WorkoutPage /> },
+          { path: '/history', element: <HistoryPage /> },
+          { path: '/history/:sessionId', element: <SessionDetailPage /> },
           { path: '/profile', element: <ProfilePage /> },
           { path: '*', element: <NotFoundPage /> },
         ],

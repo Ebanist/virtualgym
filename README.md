@@ -14,7 +14,7 @@ Plan MVP (model danych, endpointy, etapy): [`docs/PLAN.md`](docs/PLAN.md).
 | 3 | Sprzęt (zdjęcia, historia zmian, zgłoszenia) | ✅ |
 | 4 | Ćwiczenia i powiązania ze sprzętem | ✅ |
 | 5 | Planer treningowy | ✅ |
-| 6 | Tryb treningu i historia | ⏳ |
+| 6 | Tryb treningu i historia | ✅ |
 
 ## Wymagania
 
@@ -47,7 +47,7 @@ Otwórz http://localhost:5173 i zaloguj się kontem testowym albo załóż nowe.
 | `anna@example.com` | `Password123` | Fitness Arena Centrum (Warszawa) |
 | `jan@example.com` | `Password123` | Fitness Arena Centrum, Iron Gym Kazimierz (Kraków) |
 
-Seed zawiera też przykładowe plany („FBW – 2 dni” Anny – z pozycją na usuniętej suwnicy Smitha, która pokazuje
+Seed zawiera też zakończony trening Anny (widać „poprzedni wynik” w trybie treningu), przykładowe plany („FBW – 2 dni” Anny – z pozycją na usuniętej suwnicy Smitha, która pokazuje
 ostrzeżenie – oraz „Trójbój – podstawa” Jana) i 21 sztuk sprzętu (15 w Fitness Arena – w tym „Suwnica Smitha” oznaczona jako usunięta z siłowni, 6 w Iron Gym).
 
 Reset bazy: `docker compose down -v && docker compose up -d`.
@@ -65,6 +65,19 @@ Reset bazy: `docker compose down -v && docker compose up -d`.
 | `FRONTEND_URL` | `http://localhost:5173` | Baza linków (np. reset hasła) |
 | `CORS_ORIGINS` | `http://localhost:5173` | Dozwolone originy (gdy front nie idzie przez proxy) |
 | `STORAGE_DIR` | `./uploads` | Katalog na zdjęcia (`LocalFileStorage`) |
+
+## Jak przetestować ręcznie (scenariusz)
+
+1. Zaloguj się jako `anna@example.com` / `Password123`.
+2. **Start** → „Fitness Arena Centrum” → lista sprzętu (filtr kategorii, szukanie), dodaj sprzęt (podpowiedzi
+   podobnych nazw, zdjęcie), na stronie sprzętu: zgłoś problem, oznacz jako usunięty, sprawdź historię zmian.
+3. „Ćwiczenia dostępne w tej siłowni” → filtr partii; „Dodaj własne” ćwiczenie przypisane do sprzętu.
+4. **Plany** → „FBW – 2 dni”: pozycja na suwnicy Smitha ma ostrzeżenie; przesuwaj ćwiczenia ↑/↓, dodaj ćwiczenie
+   (lista zawiera tylko ćwiczenia możliwe w tej siłowni), kopiuj / archiwizuj plan.
+5. Dzień A → „Rozpocznij trening”: widać poprzedni wynik, odhacz serie (startuje timer przerwy), wpisz ciężar
+   i powtórzenia, „Zakończ i zapisz trening” → **Historia**.
+6. **Start** → „Rozpocznij trening ad hoc” → dodaj ćwiczenie z listy dostępnych.
+7. Swagger UI: http://localhost:8080/swagger-ui.html (przycisk „Authorize” – access token z odpowiedzi logowania).
 
 ## Testy
 
@@ -96,6 +109,9 @@ docker-compose.yml   PostgreSQL 16
   Pozycję można dodać tylko dla ćwiczenia dostępnego w siłowni planu na wybranym sprzęcie (422 `exercise_not_available`).
   Kolejność: `POST …/move?direction=UP|DOWN` (przyciski na mobile) lub `PUT …/order` (pełna lista id).
   Pozycja na sprzęcie usuniętym/oznaczonym jako usunięty ma `equipmentUnavailable=true`.
+- `workout/` – trening z dnia planu (migawka celów) lub ad hoc, serie (powtórzenia, ciężar, odhaczenie),
+  maks. jeden trwający trening (unikalny indeks częściowy), zakończenie/porzucenie, historia z paginacją,
+  poprzedni wynik ćwiczenia (ostatni zakończony trening).
 - `common/` – obsługa błędów (ProblemDetail, RFC 7807), `PageResponse`, `BaseEntity` (UUID + audyt), normalizacja tekstu.
 - Baza: PostgreSQL 16, migracje **Flyway** (`src/main/resources/db/migration`), Hibernate w trybie `validate`.
 - Dokumentacja API: springdoc-openapi → `/v3/api-docs`, Swagger UI → `/swagger-ui.html`.
@@ -145,3 +161,10 @@ Regeneracja typów po zmianie API:
 cd backend && ./mvnw verify      # OpenApiSpecExportTest zapisuje target/openapi.json
 cd frontend && npm run gen:api
 ```
+
+## Co dalej (poza MVP)
+
+- Design (obecne UI jest celowo proste: CSS Modules + tokeny w `global.css`).
+- Wysyłka e-maili (reset hasła), implementacja `FileStorage` na S3/MinIO.
+- Przeciąganie (drag & drop) kolejności na desktopie – API już przyjmuje pełną listę (`PUT …/order`).
+- Wersja płatna: przejęcie profilu siłowni, weryfikacja sprzętu, oficjalne plany trenerów (pola w modelu już są).

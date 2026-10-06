@@ -122,6 +122,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Historia zakończonych treningów (od najnowszych) */
+        get: operations["history"];
+        put?: never;
+        /** Start treningu z dnia planu lub ad hoc; 409 session_already_active (activeSessionId) */
+        post: operations["start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sessions/{sessionId}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Zakończenie i zapis treningu do historii */
+        post: operations["finish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sessions/{sessionId}/exercises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dodanie ćwiczenia do treningu (dostępnego w siłowni) */
+        post: operations["addExercise"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sessions/{sessionId}/exercises/{sessionExerciseId}/sets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dodatkowa seria */
+        post: operations["addSet"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sessions/{sessionId}/abandon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Porzucenie treningu (nie trafia do historii) */
+        post: operations["abandon"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/reports/{reportId}/resolve": {
         parameters: {
             query?: never;
@@ -492,6 +578,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/sessions/{sessionId}/sets/{setId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["removeSet"];
+        options?: never;
+        head?: never;
+        /** Zapis serii: powtórzenia, ciężar, odhaczenie */
+        patch: operations["updateSet"];
+        trace?: never;
+    };
     "/api/v1/me": {
         parameters: {
             query?: never;
@@ -506,6 +609,39 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["updateProfile"];
+        trace?: never;
+    };
+    "/api/v1/sessions/{sessionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sessions/active": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Trwający trening (204, jeśli brak) */
+        get: operations["active"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/me/gyms": {
@@ -532,7 +668,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_2"];
+        get: operations["get_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -648,7 +784,24 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_3"];
+        get: operations["get_4"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/exercises/{exerciseId}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ostatnie wyniki ćwiczenia z zakończonych treningów */
+        get: operations["exerciseHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -665,7 +818,7 @@ export interface paths {
             cookie?: never;
         };
         /** Historia zmian sprzętu (od najnowszych) */
-        get: operations["history"];
+        get: operations["history_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -703,6 +856,22 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sessions/{sessionId}/exercises/{sessionExerciseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["removeExercise"];
         options?: never;
         head?: never;
         patch?: never;
@@ -860,6 +1029,88 @@ export interface components {
             id: string;
             displayName: string;
         };
+        StartSessionRequest: {
+            /** Format: uuid */
+            planId?: string;
+            /** Format: uuid */
+            planDayId?: string;
+            /** Format: uuid */
+            gymId?: string;
+        };
+        ExerciseHistoryEntryDto: {
+            /** Format: uuid */
+            sessionId: string;
+            sessionTitle: string;
+            /** Format: date-time */
+            date: string;
+            sets: components["schemas"]["SetResultDto"][];
+        };
+        SessionDto: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            /** Format: uuid */
+            gymId: string;
+            gymName: string;
+            /** Format: uuid */
+            planId?: string;
+            /** @enum {string} */
+            status: "IN_PROGRESS" | "FINISHED" | "ABANDONED";
+            /** Format: date-time */
+            startedAt: string;
+            /** Format: date-time */
+            finishedAt?: string;
+            note?: string;
+            exercises: components["schemas"]["SessionExerciseDto"][];
+        };
+        SessionExerciseDto: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            position: number;
+            exercise: components["schemas"]["PlanExerciseDto"];
+            equipment?: components["schemas"]["PlanEquipmentDto"];
+            /** Format: int32 */
+            targetRepsMin?: number;
+            /** Format: int32 */
+            targetRepsMax?: number;
+            targetWeightKg?: number;
+            /** Format: int32 */
+            restSeconds: number;
+            note?: string;
+            sets: components["schemas"]["SessionSetDto"][];
+            previous?: components["schemas"]["ExerciseHistoryEntryDto"];
+        };
+        SessionSetDto: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            setNumber: number;
+            /** Format: int32 */
+            reps?: number;
+            weightKg?: number;
+            completed: boolean;
+        };
+        SetResultDto: {
+            /** Format: int32 */
+            setNumber: number;
+            /** Format: int32 */
+            reps?: number;
+            weightKg?: number;
+        };
+        FinishSessionRequest: {
+            note?: string;
+        };
+        AddSessionExerciseRequest: {
+            /** Format: uuid */
+            exerciseId: string;
+            /** Format: uuid */
+            equipmentId?: string;
+            /** Format: int32 */
+            sets?: number;
+            /** Format: int32 */
+            restSeconds?: number;
+        };
         EquipmentRefDto: {
             /** Format: uuid */
             id: string;
@@ -994,8 +1245,40 @@ export interface components {
             email: string;
             password: string;
         };
+        UpdateSetRequest: {
+            /** Format: int32 */
+            reps?: number;
+            weightKg?: number;
+            completed?: boolean;
+        };
         UpdateProfileRequest: {
             displayName: string;
+        };
+        PageResponseSessionSummaryDto: {
+            content: components["schemas"]["SessionSummaryDto"][];
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            size: number;
+            /** Format: int64 */
+            totalElements: number;
+            /** Format: int32 */
+            totalPages: number;
+        };
+        SessionSummaryDto: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            gymName: string;
+            /** Format: date-time */
+            startedAt: string;
+            /** Format: date-time */
+            finishedAt: string;
+            /** Format: int32 */
+            exerciseCount: number;
+            /** Format: int32 */
+            completedSets: number;
+            volumeKg: number;
         };
         PlanSummaryDto: {
             /** Format: uuid */
@@ -1431,6 +1714,148 @@ export interface operations {
             path: {
                 equipmentId: string;
                 exerciseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    history: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseSessionSummaryDto"];
+                };
+            };
+        };
+    };
+    start: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartSessionRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
+    finish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FinishSessionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
+    addExercise: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddSessionExerciseRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
+    addSet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+                sessionExerciseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
+    abandon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
             };
             cookie?: never;
         };
@@ -2095,6 +2520,56 @@ export interface operations {
             };
         };
     };
+    removeSet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+                setId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
+    updateSet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+                setId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSetRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
     me: {
         parameters: {
             query?: never;
@@ -2139,6 +2614,48 @@ export interface operations {
             };
         };
     };
+    get_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
+    active: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
+                };
+            };
+        };
+    };
     myGyms: {
         parameters: {
             query?: never;
@@ -2159,7 +2676,7 @@ export interface operations {
             };
         };
     };
-    get_2: {
+    get_3: {
         parameters: {
             query?: never;
             header?: never;
@@ -2320,7 +2837,7 @@ export interface operations {
             };
         };
     };
-    get_3: {
+    get_4: {
         parameters: {
             query?: never;
             header?: never;
@@ -2342,7 +2859,31 @@ export interface operations {
             };
         };
     };
-    history: {
+    exerciseHistory: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                exerciseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseHistoryEntryDto"][];
+                };
+            };
+        };
+    };
+    history_1: {
         parameters: {
             query?: {
                 page?: number;
@@ -2405,6 +2946,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EquipmentTypeDto"][];
+                };
+            };
+        };
+    };
+    removeExercise: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+                sessionExerciseId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDto"];
                 };
             };
         };

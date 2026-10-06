@@ -6,6 +6,8 @@ import { useAuth } from '../../app/AuthProvider'
 import { Alert } from '../../components/Alert'
 import { buttonClass } from '../../components/buttonClass'
 import { GymList } from '../gyms/GymList'
+import { ActiveWorkoutBanner } from './ActiveWorkoutBanner'
+import { AdHocWorkout } from './AdHocWorkout'
 
 export function HomePage() {
   const { t } = useTranslation()
@@ -14,6 +16,7 @@ export function HomePage() {
   return (
     <>
       <h1>{t('home.greeting', { name: user?.displayName })}</h1>
+      <ActiveWorkoutBanner />
       <h2>{t('home.myGyms')}</h2>
       {myGyms.isPending && <p>{t('app.loading')}</p>}
       {myGyms.isError && <Alert kind="error">{errorMessage(t, myGyms.error)}</Alert>}
@@ -21,6 +24,7 @@ export function HomePage() {
       <Link to="/gyms" className={buttonClass({ block: true })}>
         {t('home.findGym')}
       </Link>
+      {myGyms.data && myGyms.data.length > 0 && <AdHocWorkout gyms={myGyms.data} />}
       <p>
         <Link to="/exercises">{t('exercises.library')}</Link>
       </p>

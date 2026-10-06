@@ -9,7 +9,8 @@
     "logout": "Wyloguj",
     "menu": "Menu",
     "gyms": "Siłownie",
-    "plans": "Plany"
+    "plans": "Plany",
+    "history": "Historia"
   },
   "common": {
     "save": "Zapisz",
@@ -107,7 +108,11 @@
     "equipment_not_in_gym": "Wybrany sprzęt nie należy do tej siłowni.",
     "exercise_not_available": "To ćwiczenie nie jest dostępne na wybranym sprzęcie w tej siłowni.",
     "invalid_reps_range": "Zakres powtórzeń jest nieprawidłowy.",
-    "invalid_order": "Nieprawidłowa kolejność – odśwież stronę."
+    "invalid_order": "Nieprawidłowa kolejność – odśwież stronę.",
+    "session_already_active": "Masz już trwający trening.",
+    "session_not_active": "Ten trening został już zakończony.",
+    "invalid_session_source": "Nieprawidłowe dane startu treningu.",
+    "too_many_sets": "Zbyt wiele serii."
   },
   "notFound": {
     "title": "Nie znaleziono strony",
@@ -343,5 +348,50 @@
     "repsRange": "„Do” musi być ≥ „od”.",
     "chooseOtherEquipment": "Wybrany wcześniej sprzęt jest niedostępny – wybierz inny.",
     "exerciseNoLongerAvailable": "To ćwiczenie nie jest już dostępne w tej siłowni. Usuń pozycję i dodaj inne ćwiczenie."
+  },
+  "workout": {
+    "startDay": "Rozpocznij trening",
+    "adHocTitle": "Trening bez planu",
+    "startAdHoc": "Rozpocznij trening ad hoc",
+    "alreadyActive": "Masz już trwający trening. Przejść do niego?",
+    "inProgress": "Trwa trening: {{title}}",
+    "resume": "Wróć do treningu",
+    "startedAt": "start {{date}}",
+    "exercises": "Ćwiczenia treningu",
+    "exerciseOf": "Ćwiczenie {{n}} z {{total}}",
+    "target": "Cel: {{value}}",
+    "previous": "Poprzednio ({{date}}):",
+    "noPrevious": "Brak poprzedniego wyniku – to pierwszy raz!",
+    "set": "Seria",
+    "weightKg": "Ciężar (kg)",
+    "reps": "Powt.",
+    "done": "Wykonano",
+    "weightOfSet": "Ciężar w serii {{n}}",
+    "repsOfSet": "Powtórzenia w serii {{n}}",
+    "checkSet": "Odhacz serię {{n}}",
+    "uncheckSet": "Cofnij odhaczenie serii {{n}}",
+    "addSet": "Seria",
+    "removeSet": "Seria",
+    "removeExercise": "Usuń ćwiczenie",
+    "removeExerciseConfirm": "Usunąć ćwiczenie z tego treningu?",
+    "prev": "Poprzednie",
+    "next": "Następne",
+    "addExercise": "Dodaj ćwiczenie",
+    "add": "Dodaj",
+    "finish": "Zakończ i zapisz trening",
+    "finishConfirm": "Zakończyć trening i zapisać go w historii?",
+    "abandon": "Porzuć trening",
+    "abandonConfirm": "Porzucić trening? Nie zostanie zapisany w historii.",
+    "rest": "Przerwa",
+    "skipRest": "Pomiń",
+    "restOver": "Koniec przerwy!"
+  },
+  "history": {
+    "title": "Historia treningów",
+    "empty": "Nie masz jeszcze zapisanych treningów.",
+    "summary": "ćwiczenia: {{exercises}} · serie: {{sets}} · objętość: {{volume}} kg",
+    "duration": "{{minutes}} min",
+    "abandoned": "Trening porzucony.",
+    "noSets": "Brak wykonanych serii."
   }
 }

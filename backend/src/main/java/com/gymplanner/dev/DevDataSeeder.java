@@ -19,6 +19,12 @@ import com.gymplanner.plan.PlanItem;
 import com.gymplanner.plan.WorkoutPlan;
 import com.gymplanner.plan.WorkoutPlanRepository;
 import com.gymplanner.user.User;
+import com.gymplanner.workout.SessionExercise;
+import com.gymplanner.workout.SessionSet;
+import com.gymplanner.workout.WorkoutSession;
+import com.gymplanner.workout.WorkoutSessionRepository;
+import java.time.Duration;
+import java.time.Instant;
 import java.math.BigDecimal;
 import com.gymplanner.user.UserRepository;
 import java.util.ArrayList;
@@ -56,10 +62,12 @@ public class DevDataSeeder implements ApplicationRunner {
     private final EquipmentChangeRepository equipmentChanges;
     private final ExerciseRepository exercises;
     private final WorkoutPlanRepository plans;
+    private final WorkoutSessionRepository sessions;
 
     public DevDataSeeder(UserRepository users, GymRepository gyms, GymMembershipRepository memberships,
             PasswordEncoder passwordEncoder, EquipmentRepository equipment, EquipmentTypeRepository equipmentTypes,
-            EquipmentChangeRepository equipmentChanges, ExerciseRepository exercises, WorkoutPlanRepository plans) {
+            EquipmentChangeRepository equipmentChanges, ExerciseRepository exercises, WorkoutPlanRepository plans,
+            WorkoutSessionRepository sessions) {
         this.users = users;
         this.gyms = gyms;
         this.memberships = memberships;
@@ -69,6 +77,7 @@ public class DevDataSeeder implements ApplicationRunner {
         this.equipmentChanges = equipmentChanges;
         this.exercises = exercises;
         this.plans = plans;
+        this.sessions = sessions;
     }
 
     @Override
@@ -148,6 +157,20 @@ public class DevDataSeeder implements ApplicationRunner {
                 "80", 180));
         heavy.addItem(values("Martwy ciąg", find(ironEquipment, "Sztanga 20 kg"), 3, 5, 5, "120", 240));
         plans.save(sbd);
+
+        // Zakończony trening sprzed 3 dni – w trybie treningu widać „poprzedni wynik”.
+        Instant started = Instant.now().minus(Duration.ofDays(3));
+        WorkoutSession past = new WorkoutSession(anna, arena, fbw, a, fbw.getName() + " – " + a.getName(), started);
+        a.getItems().forEach(item -> {
+            SessionExercise se = past.addExercise(new SessionExercise.Target(item.getExercise(), item.getEquipment(),
+                    item.getSets(), item.getRepsMin(), item.getRepsMax(), item.getTargetWeightKg(),
+                    item.getRestSeconds(), item.getNote()));
+            for (SessionSet set : se.getSets()) {
+                set.update(item.getRepsMax(), item.getTargetWeightKg(), true, started.plus(Duration.ofMinutes(5)));
+            }
+        });
+        past.finish(started.plus(Duration.ofMinutes(55)), "Pierwszy trening");
+        sessions.save(past);
 
         log.info("Dev data seeded: users {} / {} (password: {})", ANNA, JAN, PASSWORD);
     }
