@@ -15,6 +15,11 @@ import { GymPage } from '../features/gyms/GymPage'
 import { GymSearchPage } from '../features/gyms/GymSearchPage'
 import { HomePage } from '../features/home/HomePage'
 import { NotFoundPage } from '../features/home/NotFoundPage'
+import { AddPlanItemPage } from '../features/plans/AddPlanItemPage'
+import { EditPlanItemPage } from '../features/plans/EditPlanItemPage'
+import { NewPlanPage } from '../features/plans/NewPlanPage'
+import { PlanPage } from '../features/plans/PlanPage'
+import { PlansPage } from '../features/plans/PlansPage'
 import { ProfilePage } from '../features/profile/ProfilePage'
 import { PublicOnly, RequireAuth } from './RouteGuards'
 
@@ -53,6 +58,11 @@ export const router = createBrowserRouter([
           { path: '/exercises', element: <ExerciseLibraryPage /> },
           { path: '/equipment/:id', element: <EquipmentPage /> },
           { path: '/equipment/:id/edit', element: <EditEquipmentPage /> },
+          { path: '/plans', element: <PlansPage /> },
+          { path: '/plans/new', element: <NewPlanPage /> },
+          { path: '/plans/:planId', element: <PlanPage /> },
+          { path: '/plans/:planId/days/:dayId/add', element: <AddPlanItemPage /> },
+          { path: '/plans/:planId/items/:itemId/edit', element: <EditPlanItemPage /> },
           { path: '/profile', element: <ProfilePage /> },
           { path: '*', element: <NotFoundPage /> },
         ],

@@ -21,6 +21,9 @@ export function Layout() {
             <NavLink to="/gyms" className={navClass}>
               {t('nav.gyms')}
             </NavLink>
+            <NavLink to="/plans" className={navClass}>
+              {t('nav.plans')}
+            </NavLink>
             <NavLink to="/profile" className={navClass}>
               {t('nav.profile')}
             </NavLink>

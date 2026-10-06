@@ -8,11 +8,18 @@ import com.gymplanner.equipment.EquipmentChangeRepository;
 import com.gymplanner.equipment.EquipmentRepository;
 import com.gymplanner.equipment.EquipmentStatus;
 import com.gymplanner.equipment.EquipmentTypeRepository;
+import com.gymplanner.exercise.ExerciseRepository;
+import com.gymplanner.exercise.ExerciseScope;
 import com.gymplanner.gym.Gym;
 import com.gymplanner.gym.GymMembership;
 import com.gymplanner.gym.GymMembershipRepository;
 import com.gymplanner.gym.GymRepository;
+import com.gymplanner.plan.PlanDay;
+import com.gymplanner.plan.PlanItem;
+import com.gymplanner.plan.WorkoutPlan;
+import com.gymplanner.plan.WorkoutPlanRepository;
 import com.gymplanner.user.User;
+import java.math.BigDecimal;
 import com.gymplanner.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +54,12 @@ public class DevDataSeeder implements ApplicationRunner {
     private final EquipmentRepository equipment;
     private final EquipmentTypeRepository equipmentTypes;
     private final EquipmentChangeRepository equipmentChanges;
+    private final ExerciseRepository exercises;
+    private final WorkoutPlanRepository plans;
 
     public DevDataSeeder(UserRepository users, GymRepository gyms, GymMembershipRepository memberships,
             PasswordEncoder passwordEncoder, EquipmentRepository equipment, EquipmentTypeRepository equipmentTypes,
-            EquipmentChangeRepository equipmentChanges) {
+            EquipmentChangeRepository equipmentChanges, ExerciseRepository exercises, WorkoutPlanRepository plans) {
         this.users = users;
         this.gyms = gyms;
         this.memberships = memberships;
@@ -58,6 +67,8 @@ public class DevDataSeeder implements ApplicationRunner {
         this.equipment = equipment;
         this.equipmentTypes = equipmentTypes;
         this.equipmentChanges = equipmentChanges;
+        this.exercises = exercises;
+        this.plans = plans;
     }
 
     @Override
@@ -112,6 +123,32 @@ public class DevDataSeeder implements ApplicationRunner {
             equipmentChanges.save(new EquipmentChange(e, e.getCreatedBy(), ChangeType.CREATED, Map.of()));
         }
 
+        // Przykładowe plany. Pozycja na „Suwnicy Smitha” pokazuje ostrzeżenie o usuniętym sprzęcie.
+        WorkoutPlan fbw = new WorkoutPlan(anna, arena, "FBW – 2 dni", "Trening całego ciała dwa razy w tygodniu.");
+        PlanDay a = fbw.addDay("Dzień A");
+        a.addItem(values("Przysiad ze sztangą", find(arenaEquipment, "Power rack"), 4, 6, 8, "60", 150));
+        a.addItem(values("Wyciskanie sztangi na ławce płaskiej", find(arenaEquipment, "Sztanga olimpijska 20 kg"), 4,
+                6, 8, "50", 150));
+        a.addItem(values("Ściąganie drążka wyciągu górnego do klatki", find(arenaEquipment, "Wyciąg górny"), 3, 10,
+                12, "45", 90));
+        a.addItem(values("Deska (plank)", null, 3, 1, 1, null, 60));
+        PlanDay b = fbw.addDay("Dzień B");
+        b.addItem(values("Przysiad na suwnicy Smitha", smith, 3, 8, 10, "40", 120));
+        b.addItem(values("Wyciskanie hantli na ławce skośnej", find(arenaEquipment, "Hantle 2–40 kg"), 3, 8, 12, "18",
+                90));
+        b.addItem(values("Wiosłowanie na wyciągu dolnym", find(arenaEquipment, "Wyciąg dolny do wiosłowania"), 3, 10,
+                12, "50", 90));
+        b.addItem(values("Pompki", null, 3, 10, 15, null, 60));
+        plans.save(fbw);
+
+        WorkoutPlan sbd = new WorkoutPlan(jan, iron, "Trójbój – podstawa", null);
+        PlanDay heavy = sbd.addDay("Ciężki dzień");
+        heavy.addItem(values("Przysiad ze sztangą", find(ironEquipment, "Klatka do przysiadów"), 5, 5, 5, "100", 180));
+        heavy.addItem(values("Wyciskanie sztangi na ławce płaskiej", find(ironEquipment, "Sztanga 20 kg"), 5, 5, 5,
+                "80", 180));
+        heavy.addItem(values("Martwy ciąg", find(ironEquipment, "Sztanga 20 kg"), 3, 5, 5, "120", 240));
+        plans.save(sbd);
+
         log.info("Dev data seeded: users {} / {} (password: {})", ANNA, JAN, PASSWORD);
     }
 
@@ -121,6 +158,16 @@ public class DevDataSeeder implements ApplicationRunner {
         e.setEquipmentType(equipmentTypes.findByCode(typeCode).orElseThrow());
         e.setQuantity(quantity);
         return e;
+    }
+
+    private PlanItem.Values values(String exerciseName, Equipment item, int sets, int repsMin, int repsMax,
+            String weight, int rest) {
+        return new PlanItem.Values(exercises.findFirstByNameAndScope(exerciseName, ExerciseScope.GLOBAL).orElseThrow(),
+                item, sets, repsMin, repsMax, weight == null ? null : new BigDecimal(weight), rest, null);
+    }
+
+    private static Equipment find(List<Equipment> list, String name) {
+        return list.stream().filter(e -> e.getName().equals(name)).findFirst().orElseThrow();
     }
 
     private static <T> List<T> concat(List<T> a, List<T> b) {

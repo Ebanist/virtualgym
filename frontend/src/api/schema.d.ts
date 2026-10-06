@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/v1/equipment/{id}": {
+    "/api/v1/plans/{planId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,11 +12,94 @@ export interface paths {
             cookie?: never;
         };
         get: operations["get"];
-        /** Edycja sprzętu (członkowie siłowni); zmiana statusu na REMOVED_FROM_GYM też tutaj */
         put: operations["update"];
         post?: never;
-        /** Usunięcie sprzętu (miękkie) */
+        /** Usunięcie planu (miękkie) */
         delete: operations["delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/items/{itemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["updateItem"];
+        post?: never;
+        delete: operations["deleteItem"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/days/{dayId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["renameDay"];
+        post?: never;
+        delete: operations["deleteDay"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/days/{dayId}/items/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Nowa kolejność ćwiczeń w dniu (pełna lista id) */
+        put: operations["reorderItems"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/days/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Nowa kolejność dni (pełna lista id) */
+        put: operations["reorderDays"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/equipment/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_1"];
+        /** Edycja sprzętu (członkowie siłowni); zmiana statusu na REMOVED_FROM_GYM też tutaj */
+        put: operations["update_1"];
+        post?: never;
+        /** Usunięcie sprzętu (miękkie) */
+        delete: operations["delete_1"];
         options?: never;
         head?: never;
         patch?: never;
@@ -56,6 +139,139 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Moje plany (aktywne lub zarchiwizowane), opcjonalnie dla siłowni */
+        get: operations["list"];
+        put?: never;
+        /** Nowy plan w siłowni, do której należę */
+        post: operations["create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/unarchive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["unarchive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/items/{itemId}/move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Przesunięcie ćwiczenia o jedną pozycję w dniu (przyciski góra/dół) */
+        post: operations["moveItem"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/days": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["addDay"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/days/{dayId}/move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Przesunięcie dnia o jedną pozycję (przyciski góra/dół) */
+        post: operations["moveDay"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/days/{dayId}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dodanie ćwiczenia do dnia – tylko ćwiczenia dostępne na sprzęcie siłowni planu (422 exercise_not_available) */
+        post: operations["addItem"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["copy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans/{planId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["archive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/password": {
         parameters: {
             query?: never;
@@ -84,7 +300,7 @@ export interface paths {
         get: operations["search"];
         put?: never;
         /** Dodanie siłowni. 409 gym_possible_duplicate (z listą candidates), jeśli istnieje podobna – ponów z confirmDuplicate=true */
-        post: operations["create"];
+        post: operations["create_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -133,10 +349,10 @@ export interface paths {
             cookie?: never;
         };
         /** Sprzęt w siłowni – wyszukiwanie po nazwie, filtr kategorii i statusu */
-        get: operations["list"];
+        get: operations["list_1"];
         put?: never;
         /** Dodanie sprzętu (tylko członkowie siłowni) */
-        post: operations["create_1"];
+        post: operations["create_2"];
         delete?: never;
         options?: never;
         head?: never;
@@ -316,7 +532,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_1"];
+        get: operations["get_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -432,7 +648,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_2"];
+        get: operations["get_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -496,6 +712,96 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UpdatePlanRequest: {
+            name: string;
+            description?: string;
+        };
+        PlanDayDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** Format: int32 */
+            position: number;
+            items: components["schemas"]["PlanItemDto"][];
+        };
+        PlanDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            description?: string;
+            /** Format: uuid */
+            gymId: string;
+            gymName: string;
+            archived: boolean;
+            /** @enum {string} */
+            visibility: "PRIVATE" | "GYM_OFFICIAL";
+            days: components["schemas"]["PlanDayDto"][];
+            /** Format: int32 */
+            warningCount: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        PlanEquipmentDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "REMOVED_FROM_GYM";
+            deleted: boolean;
+            thumbnailUrl?: string;
+            photoUrl?: string;
+        };
+        PlanExerciseDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @enum {string} */
+            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            bodyweight: boolean;
+        };
+        PlanItemDto: {
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            position: number;
+            exercise: components["schemas"]["PlanExerciseDto"];
+            equipment?: components["schemas"]["PlanEquipmentDto"];
+            /** Format: int32 */
+            sets: number;
+            /** Format: int32 */
+            repsMin: number;
+            /** Format: int32 */
+            repsMax: number;
+            targetWeightKg?: number;
+            /** Format: int32 */
+            restSeconds: number;
+            note?: string;
+            equipmentUnavailable: boolean;
+        };
+        PlanItemRequest: {
+            /** Format: uuid */
+            exerciseId: string;
+            /** Format: uuid */
+            equipmentId?: string;
+            /** Format: int32 */
+            sets?: number;
+            /** Format: int32 */
+            repsMin?: number;
+            /** Format: int32 */
+            repsMax?: number;
+            targetWeightKg?: number;
+            /** Format: int32 */
+            restSeconds?: number;
+            note?: string;
+        };
+        PlanDayRequest: {
+            name: string;
+        };
+        ReorderRequest: {
+            ids: string[];
+        };
         UpdateEquipmentRequest: {
             name: string;
             /** @enum {string} */
@@ -576,6 +882,15 @@ export interface components {
             resolvedBy?: components["schemas"]["UserRefDto"];
             /** Format: date-time */
             resolvedAt?: string;
+        };
+        CreatePlanRequest: {
+            /** Format: uuid */
+            gymId: string;
+            name: string;
+            description?: string;
+        };
+        CopyPlanRequest: {
+            name?: string;
         };
         ChangePasswordRequest: {
             currentPassword: string;
@@ -682,6 +997,23 @@ export interface components {
         UpdateProfileRequest: {
             displayName: string;
         };
+        PlanSummaryDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** Format: uuid */
+            gymId: string;
+            gymName: string;
+            archived: boolean;
+            /** Format: int32 */
+            dayCount: number;
+            /** Format: int32 */
+            exerciseCount: number;
+            /** Format: int32 */
+            warningCount: number;
+            /** Format: date-time */
+            updatedAt: string;
+        };
         GymSummaryDto: {
             /** Format: uuid */
             id: string;
@@ -787,6 +1119,227 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlanRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    updateItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+                itemId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanItemRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    deleteItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+                itemId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    renameDay: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+                dayId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanDayRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    deleteDay: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+                dayId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    reorderItems: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+                dayId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    reorderDays: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    get_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
                 id: string;
             };
             cookie?: never;
@@ -804,7 +1357,7 @@ export interface operations {
             };
         };
     };
-    update: {
+    update_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -830,7 +1383,7 @@ export interface operations {
             };
         };
     };
-    delete: {
+    delete_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -914,6 +1467,226 @@ export interface operations {
             };
         };
     };
+    list: {
+        parameters: {
+            query?: {
+                archived?: boolean;
+                gymId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanSummaryDto"][];
+                };
+            };
+        };
+    };
+    create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePlanRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    unarchive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    moveItem: {
+        parameters: {
+            query: {
+                direction: "UP" | "DOWN";
+            };
+            header?: never;
+            path: {
+                planId: string;
+                itemId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    addDay: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanDayRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    moveDay: {
+        parameters: {
+            query: {
+                direction: "UP" | "DOWN";
+            };
+            header?: never;
+            path: {
+                planId: string;
+                dayId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    addItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+                dayId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanItemRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    copy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["CopyPlanRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
+    archive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"];
+                };
+            };
+        };
+    };
     changePassword: {
         parameters: {
             query?: never;
@@ -967,7 +1740,7 @@ export interface operations {
             };
         };
     };
-    create: {
+    create_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1057,7 +1830,7 @@ export interface operations {
             };
         };
     };
-    list: {
+    list_1: {
         parameters: {
             query?: {
                 q?: string;
@@ -1089,7 +1862,7 @@ export interface operations {
             };
         };
     };
-    create_1: {
+    create_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -1386,7 +2159,7 @@ export interface operations {
             };
         };
     };
-    get_1: {
+    get_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -1547,7 +2320,7 @@ export interface operations {
             };
         };
     };
-    get_2: {
+    get_3: {
         parameters: {
             query?: never;
             header?: never;

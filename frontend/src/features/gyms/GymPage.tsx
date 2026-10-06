@@ -43,6 +43,11 @@ export function GymPage() {
             {t('gyms.join')}
           </Button>
         )}
+        {g.member && (
+          <Link to={`/plans/new?gymId=${g.id}`} className={buttonClass()}>
+            {t('plans.new')}
+          </Link>
+        )}
         <Link to={`/gyms/${g.id}/exercises`} className={buttonClass()}>
           {t('exercises.showAvailable')}
         </Link>

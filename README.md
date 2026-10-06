@@ -13,7 +13,7 @@ Plan MVP (model danych, endpointy, etapy): [`docs/PLAN.md`](docs/PLAN.md).
 | 2 | Siłownie i członkostwo | ✅ |
 | 3 | Sprzęt (zdjęcia, historia zmian, zgłoszenia) | ✅ |
 | 4 | Ćwiczenia i powiązania ze sprzętem | ✅ |
-| 5 | Planer treningowy | ⏳ |
+| 5 | Planer treningowy | ✅ |
 | 6 | Tryb treningu i historia | ⏳ |
 
 ## Wymagania
@@ -47,7 +47,8 @@ Otwórz http://localhost:5173 i zaloguj się kontem testowym albo załóż nowe.
 | `anna@example.com` | `Password123` | Fitness Arena Centrum (Warszawa) |
 | `jan@example.com` | `Password123` | Fitness Arena Centrum, Iron Gym Kazimierz (Kraków) |
 
-Seed zawiera też 21 sztuk sprzętu (15 w Fitness Arena – w tym „Suwnica Smitha” oznaczona jako usunięta z siłowni, 6 w Iron Gym).
+Seed zawiera też przykładowe plany („FBW – 2 dni” Anny – z pozycją na usuniętej suwnicy Smitha, która pokazuje
+ostrzeżenie – oraz „Trójbój – podstawa” Jana) i 21 sztuk sprzętu (15 w Fitness Arena – w tym „Suwnica Smitha” oznaczona jako usunięta z siłowni, 6 w Iron Gym).
 
 Reset bazy: `docker compose down -v && docker compose up -d`.
 
@@ -91,6 +92,10 @@ docker-compose.yml   PostgreSQL 16
 - `exercise/` – biblioteka 67 ćwiczeń (seed w migracji V4), własne ćwiczenia siłowni, powiązania sprzęt↔ćwiczenie.
   Logika „co da się zrobić w tej siłowni” w czystej klasie `ExerciseAvailabilityResolver` (testy jednostkowe):
   ćwiczenie z masą ciała – zawsze; inaczej potrzebny dostępny sprzęt o wymaganym typie albo jawne powiązanie.
+- `plan/` – plany (dni i pozycje jako agregat z kaskadą, soft delete). Każda modyfikacja zwraca cały plan.
+  Pozycję można dodać tylko dla ćwiczenia dostępnego w siłowni planu na wybranym sprzęcie (422 `exercise_not_available`).
+  Kolejność: `POST …/move?direction=UP|DOWN` (przyciski na mobile) lub `PUT …/order` (pełna lista id).
+  Pozycja na sprzęcie usuniętym/oznaczonym jako usunięty ma `equipmentUnavailable=true`.
 - `common/` – obsługa błędów (ProblemDetail, RFC 7807), `PageResponse`, `BaseEntity` (UUID + audyt), normalizacja tekstu.
 - Baza: PostgreSQL 16, migracje **Flyway** (`src/main/resources/db/migration`), Hibernate w trybie `validate`.
 - Dokumentacja API: springdoc-openapi → `/v3/api-docs`, Swagger UI → `/swagger-ui.html`.

@@ -42,6 +42,7 @@ Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test +
 - Autoryzacja „tylko członkowie siłowni”: `GymAccessService.requireMember(userId, gymId)` → 403 `gym_membership_required`.
 - Dostępność ćwiczeń: zawsze przez `ExerciseService.catalog(gymId)` → `GymExerciseCatalog.isAvailable(exerciseId, equipmentId)`;
   reguły tylko w `ExerciseAvailabilityResolver` (czysta klasa, testy jednostkowe).
+- Plany: dostęp tylko właściciela przez `PlanService.getOwned` (cudzy/usunięty → 404); tworzenie wymaga członkostwa.
 - Dane dev: `dev/DevDataSeeder` (profil `dev`) – rozszerzaj przy nowych modułach, seed działa tylko na pustej bazie.
 
 ## Testy backendu

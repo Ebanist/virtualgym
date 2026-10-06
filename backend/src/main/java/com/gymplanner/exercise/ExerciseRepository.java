@@ -14,6 +14,8 @@ public interface ExerciseRepository extends JpaRepository<Exercise, UUID> {
     @Query("select e from Exercise e where e.id = :id")
     Optional<Exercise> findWithDetails(UUID id);
 
+    Optional<Exercise> findFirstByNameAndScope(String name, ExerciseScope scope);
+
     /** Globalne + własne ćwiczenia podanych siłowni. */
     @EntityGraph(attributePaths = {"equipmentTypes", "secondaryMuscles", "gym"})
     @Query("""
