@@ -146,6 +146,9 @@ docker-compose.yml   PostgreSQL 16
 - React Router (trasy w `src/app/router.tsx`, strażnicy `RequireAuth` / `PublicOnly`).
 - TanStack Query do komunikacji z API, React Hook Form + Zod do formularzy.
 - Stylowanie: CSS Modules + tokeny w `src/styles/global.css`, mobile-first, bez biblioteki komponentów.
+- Design „Volt Night”: grafit + elektryczna limonka (`#C6FF3D`) + cyjan (`#3DD9FF`), motyw ciemny i jasny
+  (domyślnie wg systemu, przełącznik w nagłówku i w Profilu), fonty Space Grotesk + Inter (lokalnie, @fontsource),
+  własne ikony SVG. Kontrasty tekstu spełniają WCAG AA w obu motywach.
 - i18n: react-i18next, teksty w `src/i18n/locales/pl/translation.json`.
 - Access token tylko w pamięci; po przeładowaniu strony sesja odtwarzana przez `POST /auth/refresh`.
 
@@ -164,7 +167,6 @@ cd frontend && npm run gen:api
 
 ## Co dalej (poza MVP)
 
-- Design (obecne UI jest celowo proste: CSS Modules + tokeny w `global.css`).
 - Wysyłka e-maili (reset hasła), implementacja `FileStorage` na S3/MinIO.
 - Przeciąganie (drag & drop) kolejności na desktopie – API już przyjmuje pełną listę (`PUT …/order`).
 - Wersja płatna: przejęcie profilu siłowni, weryfikacja sprzętu, oficjalne plany trenerów (pola w modelu już są).

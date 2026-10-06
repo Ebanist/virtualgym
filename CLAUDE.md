@@ -63,7 +63,20 @@ Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
   (plik generowany – nie edytuj ręcznie). Zapytania przez TanStack Query (`useQuery`/`useMutation`).
 - Wszystkie teksty UI przez `t('...')`; komunikaty walidacji Zod to klucze i18n (`validation.*`).
 - Błędy API: `errorMessage(t, e)` dla komunikatu ogólnego, `applyFieldErrors(e, setError)` dla błędów pól.
-- Style: CSS Modules + zmienne z `styles/global.css`; mobile-first, cele dotykowe min. 44px (`--tap`).
+- Style: CSS Modules + tokeny z `styles/global.css`; mobile-first, cele dotykowe min. 44px (`--tap`).
+
+## Design system „Volt Night”
+
+- Kolory WYŁĄCZNIE przez tokeny semantyczne (`--bg`, `--surface`, `--surface-2/3`, `--border(-strong)`, `--text(-muted)`,
+  `--accent` + `--on-accent` dla wypełnień, `--accent-text` dla limonki jako tekstu, `--info`, `--warning(-bg)`,
+  `--danger(-bg)`, `--success(-bg)`). Nigdy surowe heksy w modułach – inaczej rozjedzie się motyw jasny.
+- Motywy: `[data-theme="dark"|"light"]` na `<html>`; `ThemeProvider` (`app/ThemeProvider.tsx`, wybór w localStorage
+  `gp_theme`), skrypt w `index.html` ustawia motyw przed renderem. Nowe tokeny dodawaj w obu blokach.
+- Kontrast tekstu ≥ 4.5:1 (WCAG AA) w obu motywach – limonka `#C6FF3D` jako tekst tylko w ciemnym (w jasnym `--accent-text`).
+- Typografia: `--font-display` (Space Grotesk – nagłówki, liczby, `tabular-nums`), `--font-body` (Inter).
+- Gotowe komponenty: `Icon` (własne SVG – nowe ikony dopisuj do `PATHS`), `Button` (`icon`, `iconOnly`), `Badge`,
+  `EmptyState`, `SkeletonList`, `PageHeader`, `Segmented`, `FilterChips`, `SearchField`, `Alert`, `Card`.
+- `backdrop-filter` na rodzicu `position: fixed` zmienia jego kontener – dlatego rozmycie nagłówka jest tylko na desktopie.
 - Pliki z komponentami eksportują tylko komponenty (reguła oxlint `only-export-components`) – helpery w osobnych plikach.
 
 ## Decyzje
@@ -79,7 +92,8 @@ Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
 - **Duplikaty siłowni**: `POST /gyms` zwraca 409 `gym_possible_duplicate` z `candidates`, gdy w tym samym mieście jest
   podobna nazwa (trigramy ≥ 0.4 lub zawieranie się nazw); klient ponawia z `confirmDuplicate=true`. Autor siłowni
   automatycznie zostaje jej członkiem.
-- **Nawigacja**: na telefonie dolny pasek (fixed), od 768px w nagłówku.
+- **Nawigacja**: na telefonie dolny pasek z ikonami (fixed), od 768px w nagłówku; przełącznik motywu w nagłówku i w Profilu.
+- **UI**: kolorystyka „Volt Night” (grafit + limonka + cyjan), tryb ciemny domyślnie wg systemu.
 - **Wersja płatna**: tylko pola w modelu (`Gym.claimedByOrganizationId/status`, `Equipment.source/verified`,
   `WorkoutPlan.visibility/authorTrainerId`, role `GYM_ADMIN`/`TRAINER`) – bez logiki.
 - Zdjęcia `GET /api/v1/files/**` są publiczne (ładowane przez `<img>`), identyfikatory to losowe UUID.
