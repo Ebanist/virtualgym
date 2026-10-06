@@ -1,40 +1,89 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 6px;
   margin-bottom: var(--space-4);
+  min-width: 0;
 }
 
 .label {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
 }
 
 .input {
-  min-height: var(--tap);
+  min-height: 48px;
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   font: inherit;
-  background: var(--color-surface);
+  color: var(--text);
+  background: var(--surface-2);
   width: 100%;
+  transition:
+    border-color 0.15s var(--ease),
+    box-shadow 0.15s var(--ease);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.input:hover:not(:disabled) {
+  border-color: var(--border-strong);
 }
 
 .input:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--info);
+  box-shadow: 0 0 0 3px var(--info-soft);
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+select.input {
+  appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b97a6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+select.input option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 88px;
+}
+
+input[type='file'].input {
+  padding: var(--space-3);
 }
 
 .invalid {
-  border-color: var(--color-danger);
+  border-color: var(--danger);
+}
+
+.invalid:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-bg);
 }
 
 .hint {
-  color: var(--color-muted);
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
 .error {
-  color: var(--color-danger);
+  color: var(--danger);
   font-size: 0.85rem;
+  font-weight: 500;
 }

@@ -36,9 +36,9 @@ export function RegisterPage() {
 
   return (
     <>
-      <p className={styles.brand}>{t('app.name')}</p>
       <Card>
         <h1 className={styles.title}>{t('auth.register.title')}</h1>
+        <p className={styles.subtitle}>{t('auth.register.subtitle')}</p>
         {serverError && <Alert kind="error">{serverError}</Alert>}
         <form onSubmit={onSubmit} noValidate>
           <TextField

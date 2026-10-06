@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from './Button'
+import { Icon } from './Icon'
 import styles from './Pagination.module.css'
 
 interface Props {
@@ -14,12 +15,13 @@ export function Pagination({ page, totalPages, onChange }: Props) {
   if (totalPages <= 1) return null
   return (
     <nav className={styles.pagination} aria-label={t('pagination.label')}>
-      <Button small disabled={page <= 0} onClick={() => onChange(page - 1)}>
+      <Button small icon="chevronLeft" disabled={page <= 0} onClick={() => onChange(page - 1)}>
         {t('pagination.prev')}
       </Button>
       <span className={styles.info}>{t('pagination.info', { page: page + 1, total: totalPages })}</span>
       <Button small disabled={page >= totalPages - 1} onClick={() => onChange(page + 1)}>
         {t('pagination.next')}
+        <Icon name="chevronRight" size={16} />
       </Button>
     </nav>
   )

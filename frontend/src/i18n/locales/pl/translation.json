@@ -31,14 +31,16 @@
       "submit": "Zaloguj",
       "noAccount": "Nie masz konta?",
       "register": "Zarejestruj się",
-      "forgot": "Nie pamiętasz hasła?"
+      "forgot": "Nie pamiętasz hasła?",
+      "subtitle": "Twoja siłownia. Twój sprzęt. Twój plan."
     },
     "register": {
       "title": "Załóż konto",
       "submit": "Zarejestruj",
       "hasAccount": "Masz już konto?",
       "login": "Zaloguj się",
-      "passwordHint": "Min. 8 znaków, co najmniej jedna litera i jedna cyfra."
+      "passwordHint": "Min. 8 znaków, co najmniej jedna litera i jedna cyfra.",
+      "subtitle": "Układaj plany na sprzęcie, który naprawdę jest w Twojej siłowni."
     },
     "forgot": {
       "title": "Reset hasła",
@@ -69,7 +71,17 @@
     "greeting": "Cześć, {{name}}!",
     "myGyms": "Moje siłownie",
     "noGyms": "Nie należysz jeszcze do żadnej siłowni. Znajdź swoją i dołącz, aby widzieć sprzęt i układać plany.",
-    "findGym": "Znajdź lub dodaj siłownię"
+    "findGym": "Znajdź siłownię",
+    "subtitle": "Gotowy na trening?",
+    "quickActions": "Na skróty",
+    "newPlan": "Nowy plan",
+    "newPlanHint": "Ułóż plan na sprzęcie siłowni",
+    "library": "Biblioteka",
+    "libraryHint": "Ćwiczenia i partie mięśniowe",
+    "findGymHint": "Dołącz lub dodaj nową",
+    "adHocHint": "Bez planu – dodawaj ćwiczenia na bieżąco",
+    "myPlans": "Moje plany",
+    "plansHint": "Aktywne i archiwum"
   },
   "validation": {
     "required": "To pole jest wymagane.",
@@ -140,7 +152,8 @@
     "join": "Dołącz do siłowni",
     "leave": "Opuść siłownię",
     "leaveConfirm": "Na pewno opuścić tę siłownię?",
-    "members": "członkowie: {{count}}"
+    "members": "członkowie: {{count}}",
+    "searchPlaceholder": "Nazwa siłowni"
   },
   "equipment": {
     "title": "Sprzęt",
@@ -227,7 +240,10 @@
         "REMOVED_FROM_GYM": "Sprzęt usunięty z siłowni"
       }
     },
-    "typeShort": "Typ"
+    "typeShort": "Typ",
+    "count": "{{count}} pozycji",
+    "quantityLabel": "Liczba sztuk",
+    "noPhoto": "Brak zdjęcia"
   },
   "muscles": {
     "CHEST": "Klatka piersiowa",
@@ -281,7 +297,8 @@
     "linkedManually": "powiązane ręcznie",
     "searchToLink": "Wyszukaj ćwiczenie w bibliotece",
     "showAvailable": "Ćwiczenia dostępne w tej siłowni",
-    "library": "Biblioteka ćwiczeń"
+    "library": "Biblioteka ćwiczeń",
+    "count": "Ćwiczeń: {{count}}"
   },
   "plans": {
     "title": "Plany",
@@ -384,7 +401,10 @@
     "abandonConfirm": "Porzucić trening? Nie zostanie zapisany w historii.",
     "rest": "Przerwa",
     "skipRest": "Pomiń",
-    "restOver": "Koniec przerwy!"
+    "restOver": "Koniec przerwy!",
+    "live": "Trwa trening",
+    "setsProgress": "Wykonane serie: {{done}} z {{total}}",
+    "quickStart": "Szybki start"
   },
   "history": {
     "title": "Historia treningów",
@@ -393,5 +413,14 @@
     "duration": "{{minutes}} min",
     "abandoned": "Trening porzucony.",
     "noSets": "Brak wykonanych serii."
+  },
+  "theme": {
+    "title": "Wygląd",
+    "label": "Motyw",
+    "system": "Systemowy",
+    "light": "Jasny",
+    "dark": "Ciemny",
+    "switchToLight": "Włącz jasny motyw",
+    "switchToDark": "Włącz ciemny motyw"
   }
 }

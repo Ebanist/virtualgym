@@ -1,0 +1,140 @@
+.hello {
+  margin-bottom: var(--space-5);
+}
+
+.hello h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.hello p {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--space-6) 0 var(--space-3);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
+.sectionTitle a {
+  font-size: 0.85rem;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  min-height: 120px;
+  transition:
+    border-color 0.15s var(--ease),
+    transform 0.1s var(--ease);
+}
+
+.tile:hover {
+  border-color: var(--border-strong);
+}
+
+.tile:active {
+  transform: scale(0.98);
+}
+
+.tileIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--accent-text);
+}
+
+.tileTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.tileHint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Karta „Trening ad hoc” / trwający trening – wyróżniona akcentem. */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(400px 200px at 100% 0%, var(--accent-soft), transparent 70%),
+    var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-3);
+}
+
+.heroActive {
+  border-color: var(--accent);
+  box-shadow: var(--glow-accent);
+}
+
+.heroLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.heroTitle {
+  margin: var(--space-2) 0 var(--space-1);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.heroText {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}

@@ -13,6 +13,9 @@ import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
 import { buttonClass } from '../../components/buttonClass'
 import { Card } from '../../components/Card'
+import { Icon } from '../../components/Icon'
+import { PageHeader } from '../../components/PageHeader'
+import { SkeletonList } from '../../components/Skeleton'
 import styles from './Equipment.module.css'
 import { EquipmentExercisesSection } from './EquipmentExercisesSection'
 import { HistorySection } from './HistorySection'
@@ -25,45 +28,56 @@ export function EquipmentPage() {
   const location = useLocation()
   const equipment = useEquipment(id)
 
-  if (equipment.isPending) return <p>{t('app.loading')}</p>
+  if (equipment.isPending) return <SkeletonList count={4} />
   if (equipment.isError) return <Alert kind="error">{errorMessage(t, equipment.error)}</Alert>
   const e = equipment.data
   const photoError = (location.state as { photoError?: string } | null)?.photoError
 
   return (
     <>
-      <p className={styles.meta}>
-        <Link to={`/gyms/${e.gymId}`}>← {e.gymName}</Link>
-      </p>
-      <h1>{e.name}</h1>
+      <PageHeader
+        title={e.name}
+        subtitle={t(`equipment.category.${e.category}`)}
+        back={{ to: `/gyms/${e.gymId}`, label: e.gymName }}
+      />
       {photoError && <Alert kind="error">{photoError}</Alert>}
       {e.status === 'REMOVED_FROM_GYM' && <Alert kind="warning">{t('equipment.removedInfo')}</Alert>}
       {!e.member && <Alert kind="info">{t('equipment.joinToEdit')}</Alert>}
-      {e.photoUrl && (
+      {e.photoUrl ? (
         <a href={e.photoUrl} target="_blank" rel="noreferrer">
           <img src={e.photoUrl} alt={e.name} className={styles.photo} />
         </a>
+      ) : (
+        <div className={styles.photoPlaceholder}>
+          <Icon name="camera" size={28} />
+          <span>{t('equipment.noPhoto')}</span>
+        </div>
       )}
-      <Card>
-        <dl className={styles.details}>
-          <dt>{t('equipment.categoryLabel')}</dt>
-          <dd>{t(`equipment.category.${e.category}`)}</dd>
+      <dl className={styles.tiles}>
+        <div className={styles.tile}>
           <dt>{t('equipment.typeShort')}</dt>
           <dd>{e.equipmentType?.name ?? '—'}</dd>
-          <dt>{t('equipment.quantity')}</dt>
-          <dd>{e.quantity ?? '—'}</dd>
+        </div>
+        <div className={styles.tile}>
+          <dt>{t('equipment.quantityLabel')}</dt>
+          <dd className="num">{e.quantity ?? '—'}</dd>
+        </div>
+        <div className={styles.tile}>
           <dt>{t('equipment.statusLabel')}</dt>
-          <dd>{t(`equipment.status.${e.status}`)}</dd>
-          {e.description && (
-            <>
-              <dt>{t('equipment.description')}</dt>
-              <dd>{e.description}</dd>
-            </>
-          )}
+          <dd className={e.status === 'REMOVED_FROM_GYM' ? styles.statusWarn : styles.statusOk}>
+            {t(`equipment.status.${e.status}`)}
+          </dd>
+        </div>
+        <div className={styles.tile}>
           <dt>{t('equipment.addedBy')}</dt>
           <dd>{e.createdBy.displayName}</dd>
-        </dl>
-      </Card>
+        </div>
+      </dl>
+      {e.description && (
+        <Card>
+          <p className={styles.descriptionText}>{e.description}</p>
+        </Card>
+      )}
       {e.member && <MemberActions equipment={e} />}
       <EquipmentExercisesSection equipment={e} />
       <ReportsSection equipment={e} />
@@ -100,14 +114,19 @@ function MemberActions({ equipment: e }: { equipment: Equipment }) {
     <>
       {error && <Alert kind="error">{errorMessage(t, error)}</Alert>}
       <div className={styles.actions}>
-        <Link to={`/equipment/${e.id}/edit`} className={buttonClass()}>
+        <Link to={`/equipment/${e.id}/edit`} className={buttonClass({ small: true })}>
+          <Icon name="edit" size={16} />
           {t('common.edit')}
         </Link>
-        <Button onClick={() => setShowPhoto((v) => !v)}>{e.photoUrl ? t('equipment.changePhoto') : t('equipment.addPhoto')}</Button>
-        <Button onClick={toggleStatus} disabled={update.isPending}>
+        <Button small icon="camera" onClick={() => setShowPhoto((v) => !v)}>
+          {e.photoUrl ? t('equipment.changePhoto') : t('equipment.addPhoto')}
+        </Button>
+        <Button small icon={removed ? 'check' : 'warning'} onClick={toggleStatus} disabled={update.isPending}>
           {removed ? t('equipment.markActive') : t('equipment.markRemoved')}
         </Button>
         <Button
+          small
+          icon="trash"
           variant="danger"
           disabled={remove.isPending}
           onClick={async () => {
@@ -124,6 +143,7 @@ function MemberActions({ equipment: e }: { equipment: Equipment }) {
           <PhotoInput file={photo} onChange={setPhoto} label={t('equipment.photo')} />
           <Button
             variant="primary"
+            icon="camera"
             disabled={!photo || upload.isPending}
             onClick={async () => {
               if (!photo) return

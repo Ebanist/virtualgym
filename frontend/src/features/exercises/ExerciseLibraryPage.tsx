@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { errorMessage } from '../../api/errors'
 import { useExerciseLibrary, type MuscleGroup } from '../../api/exercises'
 import { Alert } from '../../components/Alert'
+import { EmptyState } from '../../components/EmptyState'
+import { PageHeader } from '../../components/PageHeader'
+import { SkeletonList } from '../../components/Skeleton'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { ExerciseCard } from './ExerciseCard'
 import { ExerciseFilters } from './ExerciseFilters'
@@ -16,11 +19,11 @@ export function ExerciseLibraryPage() {
   const library = useExerciseLibrary(debouncedQ, muscle || undefined)
   return (
     <>
-      <h1>{t('exercises.libraryTitle')}</h1>
+      <PageHeader title={t('exercises.libraryTitle')} subtitle={library.data ? t('exercises.count', { count: library.data.length }) : undefined} />
       <ExerciseFilters q={q} muscle={muscle} onQChange={setQ} onMuscleChange={setMuscle} />
       {library.isError && <Alert kind="error">{errorMessage(t, library.error)}</Alert>}
-      {library.isPending && <p>{t('app.loading')}</p>}
-      {library.data?.length === 0 && <p className={styles.meta}>{t('exercises.noResults')}</p>}
+      {library.isPending && <SkeletonList />}
+      {library.data?.length === 0 && <EmptyState icon="search">{t('exercises.noResults')}</EmptyState>}
       <ul className={styles.list}>
         {library.data?.map((exercise) => (
           <li key={exercise.id}>

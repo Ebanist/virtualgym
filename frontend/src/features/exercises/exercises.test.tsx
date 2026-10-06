@@ -18,7 +18,8 @@ const exercise: Exercise = {
 describe('ExerciseCard', () => {
   it('shows muscles and required equipment types', () => {
     render(<ExerciseCard exercise={exercise} />)
-    expect(screen.getByText('Plecy · Biceps')).toBeInTheDocument()
+    expect(screen.getByText('Plecy')).toBeInTheDocument()
+    expect(screen.getByText('· Biceps')).toBeInTheDocument()
     expect(screen.getByText('Wyciąg górny')).toBeInTheDocument()
     expect(screen.queryByText('Masa ciała')).not.toBeInTheDocument()
   })

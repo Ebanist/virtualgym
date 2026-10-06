@@ -11,7 +11,7 @@
 }
 
 .meta {
-  color: var(--color-muted);
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -29,8 +29,8 @@
 }
 
 .day {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   margin-bottom: var(--space-4);
 }
@@ -41,7 +41,7 @@
   justify-content: space-between;
   gap: var(--space-2);
   padding: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border);
 }
 
 .dayHeader h2 {
@@ -59,11 +59,11 @@
   display: flex;
   gap: var(--space-2);
   padding: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border);
 }
 
 .itemWarning {
-  background: var(--color-warning-bg);
+  background: var(--warning-bg);
 }
 
 .itemBody {
@@ -76,7 +76,7 @@
 }
 
 .warning {
-  color: var(--color-warning);
+  color: var(--warning);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -91,9 +91,9 @@
 .iconButton {
   width: var(--tap);
   height: var(--tap);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--color-surface);
+  background: var(--surface);
   font-size: 1.1rem;
   cursor: pointer;
 }

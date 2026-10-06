@@ -6,6 +6,10 @@ import { useAvailableExercises, type MuscleGroup } from '../../api/exercises'
 import { useGym } from '../../api/gyms'
 import { Alert } from '../../components/Alert'
 import { buttonClass } from '../../components/buttonClass'
+import { EmptyState } from '../../components/EmptyState'
+import { Icon } from '../../components/Icon'
+import { PageHeader } from '../../components/PageHeader'
+import { SkeletonList } from '../../components/Skeleton'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { ExerciseCard } from './ExerciseCard'
 import { ExerciseFilters } from './ExerciseFilters'
@@ -22,29 +26,30 @@ export function GymExercisesPage() {
 
   return (
     <>
-      <p className={styles.meta}>
-        <Link to={`/gyms/${gymId}`}>← {gym.data?.name ?? t('common.back')}</Link>
-      </p>
-      <div className={styles.header}>
-        <h1>{t('exercises.availableTitle')}</h1>
-        {gym.data?.member && (
-          <Link to={`/gyms/${gymId}/exercises/new`} className={buttonClass({ variant: 'primary', small: true })}>
-            {t('exercises.addCustom')}
-          </Link>
-        )}
-      </div>
-      <p className={styles.meta}>{t('exercises.availableIntro')}</p>
+      <PageHeader
+        title={t('exercises.availableTitle')}
+        subtitle={t('exercises.availableIntro')}
+        back={{ to: `/gyms/${gymId}`, label: gym.data?.name ?? t('common.back') }}
+        action={
+          gym.data?.member && (
+            <Link to={`/gyms/${gymId}/exercises/new`} className={buttonClass({ variant: 'primary', small: true })}>
+              <Icon name="plus" size={16} />
+              {t('exercises.addCustom')}
+            </Link>
+          )
+        }
+      />
       <ExerciseFilters q={q} muscle={muscle} onQChange={setQ} onMuscleChange={setMuscle} />
       {exercises.isError && <Alert kind="error">{errorMessage(t, exercises.error)}</Alert>}
-      {exercises.isPending && <p>{t('app.loading')}</p>}
-      {exercises.data?.length === 0 && <p className={styles.meta}>{t('exercises.noResults')}</p>}
+      {exercises.isPending && <SkeletonList />}
+      {exercises.data?.length === 0 && <EmptyState icon="search">{t('exercises.noResults')}</EmptyState>}
       <ul className={styles.list}>
         {exercises.data?.map(({ exercise, equipment }) => (
           <li key={exercise.id}>
             <ExerciseCard exercise={exercise}>
               {equipment.length > 0 && (
                 <div className={styles.meta}>
-                  {t('exercises.onEquipment')}:{' '}
+                  <Icon name="gym" size={14} /> {t('exercises.onEquipment')}:{' '}
                   {equipment.map((eq, i) => (
                     <span key={eq.id}>
                       {i > 0 && ', '}

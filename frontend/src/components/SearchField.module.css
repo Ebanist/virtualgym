@@ -1,0 +1,17 @@
+.wrap {
+  position: relative;
+  margin-bottom: var(--space-3);
+}
+
+.icon {
+  position: absolute;
+  left: 14px;
+  top: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input {
+  padding-left: 42px;
+  border-radius: var(--radius-pill);
+}

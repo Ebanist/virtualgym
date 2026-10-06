@@ -7,6 +7,8 @@
 }
 
 .info {
-  color: var(--color-muted);
+  color: var(--text-muted);
   font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
 }

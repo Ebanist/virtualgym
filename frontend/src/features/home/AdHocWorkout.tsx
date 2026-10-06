@@ -4,9 +4,9 @@ import { errorMessage } from '../../api/errors'
 import type { GymSummary } from '../../api/gyms'
 import { Alert } from '../../components/Alert'
 import { Button } from '../../components/Button'
-import { Card } from '../../components/Card'
 import { SelectField } from '../../components/SelectField'
 import { useStartWorkout } from '../workout/useStartWorkout'
+import styles from './Home.module.css'
 
 /** Start treningu bez planu w wybranej siłowni. */
 export function AdHocWorkout({ gyms }: { gyms: GymSummary[] }) {
@@ -15,8 +15,10 @@ export function AdHocWorkout({ gyms }: { gyms: GymSummary[] }) {
   const start = useStartWorkout()
   if (gyms.length === 0) return null
   return (
-    <Card>
-      <h2>{t('workout.adHocTitle')}</h2>
+    <section className={styles.hero}>
+      <span className={styles.heroLabel}>{t('workout.quickStart')}</span>
+      <h2 className={styles.heroTitle}>{t('workout.adHocTitle')}</h2>
+      <p className={styles.heroText}>{t('home.adHocHint')}</p>
       {start.error && <Alert kind="error">{errorMessage(t, start.error)}</Alert>}
       {gyms.length > 1 && (
         <SelectField label={t('plans.gym')} value={gymId} onChange={(e) => setGymId(e.target.value)}>
@@ -27,9 +29,9 @@ export function AdHocWorkout({ gyms }: { gyms: GymSummary[] }) {
           ))}
         </SelectField>
       )}
-      <Button variant="primary" block disabled={start.isPending || !gymId} onClick={() => void start.run({ gymId })}>
+      <Button variant="primary" block icon="play" disabled={start.isPending || !gymId} onClick={() => void start.run({ gymId })}>
         {t('workout.startAdHoc')}
       </Button>
-    </Card>
+    </section>
   )
 }

@@ -5,8 +5,12 @@ import { errorMessage } from '../../api/errors'
 import { useGymSearch } from '../../api/gyms'
 import { Alert } from '../../components/Alert'
 import { buttonClass } from '../../components/buttonClass'
+import { EmptyState } from '../../components/EmptyState'
+import { Icon } from '../../components/Icon'
+import { PageHeader } from '../../components/PageHeader'
 import { Pagination } from '../../components/Pagination'
-import { TextField } from '../../components/TextField'
+import { SearchField } from '../../components/SearchField'
+import { SkeletonList } from '../../components/Skeleton'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { GymList } from './GymList'
 import styles from './Gyms.module.css'
@@ -38,24 +42,30 @@ export function GymSearchPage() {
   }, [debouncedQ, debouncedCity, setParams])
 
   const search = useGymSearch(debouncedQ, debouncedCity, page)
+  const addLink = (
+    <Link to="/gyms/new" className={buttonClass({ variant: 'primary', small: true })}>
+      <Icon name="plus" size={16} />
+      {t('gyms.add')}
+    </Link>
+  )
 
   return (
     <>
-      <div className={styles.header}>
-        <h1>{t('gyms.searchTitle')}</h1>
-        <Link to="/gyms/new" className={buttonClass({ variant: 'primary', small: true })}>
-          {t('gyms.add')}
-        </Link>
-      </div>
+      <PageHeader title={t('gyms.searchTitle')} action={addLink} />
       <div className={styles.filters} role="search">
-        <TextField label={t('gyms.name')} value={q} onChange={(e) => setQ(e.target.value)} />
-        <TextField label={t('gyms.city')} value={city} onChange={(e) => setCity(e.target.value)} />
+        <SearchField label={t('gyms.name')} placeholder={t('gyms.searchPlaceholder')} value={q} onChange={setQ} />
+        <SearchField label={t('gyms.city')} value={city} onChange={setCity} />
       </div>
       {search.isError && <Alert kind="error">{errorMessage(t, search.error)}</Alert>}
-      {search.isPending && <p>{t('app.loading')}</p>}
-      {search.data && (
+      {search.isPending && <SkeletonList />}
+      {search.data?.content.length === 0 && (
+        <EmptyState icon="gym" action={addLink}>
+          {t('gyms.noResults')}
+        </EmptyState>
+      )}
+      {search.data && search.data.content.length > 0 && (
         <>
-          <GymList gyms={search.data.content} emptyText={t('gyms.noResults')} />
+          <GymList gyms={search.data.content} emptyText="" />
           <Pagination
             page={search.data.page}
             totalPages={search.data.totalPages}

@@ -1,0 +1,41 @@
+.header {
+  margin-bottom: var(--space-4);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: var(--space-2);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-height: 32px;
+}
+
+.back:hover {
+  color: var(--text);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.action {
+  flex: none;
+}
