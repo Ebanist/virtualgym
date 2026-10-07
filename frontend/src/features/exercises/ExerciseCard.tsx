@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { Exercise } from '../../api/exercises'
 import { Badge } from '../../components/Badge'
 import styles from './Exercises.module.css'
+import { OriginBadge } from './OriginBadge'
 
 interface Props {
   exercise: Exercise
@@ -29,8 +30,8 @@ export function ExerciseCard({ exercise, children, action }: Props) {
       </div>
       {exercise.description && <p className={styles.description}>{exercise.description}</p>}
       <div className={styles.chips}>
-        {exercise.bodyweight && <Badge tone="accent">{t('exercises.bodyweight')}</Badge>}
-        {exercise.scope === 'CUSTOM' && <Badge tone="info">{t('exercises.custom')}</Badge>}
+        <OriginBadge exercise={exercise} />
+        {exercise.bodyweight && <Badge>{t('exercises.bodyweight')}</Badge>}
         {exercise.equipmentTypes.map((type) => (
           <Badge key={type.id}>{type.name}</Badge>
         ))}

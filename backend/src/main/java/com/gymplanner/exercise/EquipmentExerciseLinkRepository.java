@@ -14,6 +14,9 @@ public interface EquipmentExerciseLinkRepository extends JpaRepository<Equipment
             """)
     List<EquipmentExerciseLink> findByGym(UUID gymId);
 
+    @Query("select l from EquipmentExerciseLink l join fetch l.equipment where l.exercise.id = :exerciseId")
+    List<EquipmentExerciseLink> findByExerciseId(UUID exerciseId);
+
     Optional<EquipmentExerciseLink> findByEquipmentIdAndExerciseId(UUID equipmentId, UUID exerciseId);
 
     boolean existsByEquipmentIdAndExerciseId(UUID equipmentId, UUID exerciseId);

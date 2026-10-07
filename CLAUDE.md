@@ -41,7 +41,7 @@ Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
 - Tekst do wyszukiwania/duplikatów: `TextNormalizer.normalize` (małe litery, bez polskich znaków); w encji trzymamy
   kolumnę `normalized_*`, a podobieństwo liczymy przez `pg_trgm` (`similarity`).
 - Autoryzacja „tylko członkowie siłowni”: `GymAccessService.requireMember(userId, gymId)` → 403 `gym_membership_required`.
-- Dostępność ćwiczeń: zawsze przez `ExerciseService.catalog(gymId)` → `GymExerciseCatalog.isAvailable(exerciseId, equipmentId)`;
+- Dostępność ćwiczeń: zawsze przez `ExerciseService.catalog(gymId, userId)` (zależy od widoczności) → `GymExerciseCatalog.isAvailable(exerciseId, equipmentId)`;
   reguły tylko w `ExerciseAvailabilityResolver` (czysta klasa, testy jednostkowe).
 - Plany: dostęp tylko właściciela przez `PlanService.getOwned` (cudzy/usunięty → 404); tworzenie wymaga członkostwa.
 - Trening: maks. jeden `IN_PROGRESS` na użytkownika (409 `session_already_active` z `activeSessionId`);
@@ -75,7 +75,8 @@ Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
 - Kontrast tekstu ≥ 4.5:1 (WCAG AA) w obu motywach – limonka `#C6FF3D` jako tekst tylko w ciemnym (w jasnym `--accent-text`).
 - Typografia: `--font-display` (Space Grotesk – nagłówki, liczby, `tabular-nums`), `--font-body` (Inter).
 - Gotowe komponenty: `Icon` (własne SVG – nowe ikony dopisuj do `PATHS`), `Button` (`icon`, `iconOnly`), `Badge`,
-  `EmptyState`, `SkeletonList`, `PageHeader`, `Segmented`, `FilterChips`, `SearchField`, `Alert`, `Card`.
+  `EmptyState`, `SkeletonList`, `PageHeader`, `Segmented`, `FilterChips`, `SearchField`, `Alert`, `Card`, `Sheet`
+  (panel od dołu / okno dialogowe).
 - `backdrop-filter` na rodzicu `position: fixed` zmienia jego kontener – dlatego rozmycie nagłówka jest tylko na desktopie.
 - Pliki z komponentami eksportują tylko komponenty (reguła oxlint `only-export-components`) – helpery w osobnych plikach.
 
@@ -86,7 +87,12 @@ Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
   ograniczone do `/api/v1/auth`.
 - **Klient API**: typy generowane z OpenAPI (`openapi-typescript`) + `openapi-fetch`; hooki pisane ręcznie.
 - **Ćwiczenie ↔ sprzęt**: globalny słownik typów sprzętu (dopasowanie automatyczne) + ręczne powiązania z konkretnym sprzętem.
-- **Własne ćwiczenia** widoczne dla wszystkich członków siłowni, w której je dodano.
+- **Własne ćwiczenia**: należą do siłowni; widoczność `PRIVATE` (tylko autor, domyślnie) lub `GYM` (członkowie siłowni).
+  Reguła w `Exercise.isVisibleTo` i lustrzanie w `ExerciseRepository.findVisible` – zmieniaj obie razem. Cudze prywatne
+  → 404. Edycja/usuwanie tylko autor (403 `exercise_not_owner`); usuwanie miękkie (plany i historia zostają);
+  publicznego ćwiczenia używanego w cudzych planach nie można uczynić prywatnym (409 `exercise_used_by_others`).
+  Frontend: jeden panel `ExerciseFormSheet` (plan, sprzęt, trening, listy ćwiczeń), pochodzenie
+  `exerciseOrigin` → Biblioteka / Moje / Społeczność (`OriginBadge`, filtr w `ExerciseFilters`).
 - **Sprzęt „usunięty z siłowni”** ustawia ręcznie dowolny członek (historia zmian); zgłoszenia są informacyjne.
 - **Trening**: z dnia planu lub ad hoc.
 - **Duplikaty siłowni**: `POST /gyms` zwraca 409 `gym_possible_duplicate` z `candidates`, gdy w tym samym mieście jest

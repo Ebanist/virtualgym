@@ -1,0 +1,95 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(5, 8, 12, 0.6);
+  animation: fadeIn 0.15s var(--ease);
+}
+
+.panel {
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: var(--shadow-2);
+  animation: slideUp 0.22s var(--ease);
+}
+
+.handle {
+  width: 40px;
+  height: 4px;
+  margin: 8px auto 0;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.body {
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .overlay {
+    align-items: center;
+  }
+
+  .panel {
+    max-width: 560px;
+    border-radius: var(--radius-lg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .handle {
+    display: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(32px);
+    opacity: 0;
+  }
+}

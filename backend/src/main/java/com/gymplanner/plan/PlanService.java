@@ -186,7 +186,7 @@ public class PlanService {
         if (request.repsMax() < request.repsMin()) {
             throw new BusinessRuleException("invalid_reps_range", "repsMax must be greater or equal to repsMin");
         }
-        GymExerciseCatalog catalog = exerciseService.catalog(plan.getGym().getId());
+        GymExerciseCatalog catalog = exerciseService.catalog(plan.getGym().getId(), plan.getOwner().getId());
         if (!catalog.isAvailable(request.exerciseId(), request.equipmentId())) {
             throw new BusinessRuleException("exercise_not_available",
                     "This exercise cannot be done on the selected equipment in this gym");

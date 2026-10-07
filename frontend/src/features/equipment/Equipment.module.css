@@ -238,3 +238,48 @@
 .sectionHeader h2 {
   margin: 0;
 }
+
+.linkedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.linkedList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.linkedList li:last-child {
+  border-bottom: none;
+}
+
+.linkedName {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.linkedName .meta {
+  font-weight: 400;
+}
+
+.picker {
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.pickerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}

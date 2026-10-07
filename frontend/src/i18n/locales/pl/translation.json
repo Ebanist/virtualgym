@@ -124,7 +124,9 @@
     "session_already_active": "Masz już trwający trening.",
     "session_not_active": "Ten trening został już zakończony.",
     "invalid_session_source": "Nieprawidłowe dane startu treningu.",
-    "too_many_sets": "Zbyt wiele serii."
+    "too_many_sets": "Zbyt wiele serii.",
+    "exercise_used_by_others": "Inni członkowie mają to ćwiczenie w swoich planach – nie można go uczynić prywatnym.",
+    "exercise_not_owner": "Tylko autor może zmieniać to ćwiczenie."
   },
   "notFound": {
     "title": "Nie znaleziono strony",
@@ -275,10 +277,7 @@
     "noResults": "Brak ćwiczeń spełniających kryteria.",
     "onEquipment": "Sprzęt",
     "bodyweight": "Masa ciała",
-    "custom": "Własne",
-    "addCustom": "Dodaj własne",
-    "addCustomTitle": "Własne ćwiczenie",
-    "addCustomIntro": "Ćwiczenie będzie widoczne dla wszystkich członków tej siłowni.",
+    "addCustom": "Nowe ćwiczenie",
     "name": "Nazwa ćwiczenia",
     "primaryMuscle": "Główna partia mięśniowa",
     "chooseMuscle": "Wybierz partię",
@@ -298,7 +297,33 @@
     "searchToLink": "Wyszukaj ćwiczenie w bibliotece",
     "showAvailable": "Ćwiczenia dostępne w tej siłowni",
     "library": "Biblioteka ćwiczeń",
-    "count": "Ćwiczeń: {{count}}"
+    "count": "Ćwiczeń: {{count}}",
+    "newExercise": "Nowe ćwiczenie",
+    "newTitle": "Nowe ćwiczenie",
+    "editTitle": "Edycja ćwiczenia",
+    "addNamed": "Dodaj „{{name}}”",
+    "editNamed": "Edytuj: {{name}}",
+    "deleteNamed": "Usuń: {{name}}",
+    "deleteConfirm": "Usunąć to ćwiczenie? Zniknie z list, ale plany i historia treningów, które go używają, zostaną bez zmian.",
+    "similarHint": "Podobne ćwiczenia już istnieją – może wystarczy któreś z nich?",
+    "useThis": "Użyj tego",
+    "moreDetails": "Partie dodatkowe i opis (opcjonalnie)",
+    "originLabel": "Pochodzenie",
+    "allOrigins": "Wszystkie",
+    "origin": {
+      "library": "Biblioteka",
+      "mine": "Moje",
+      "community": "Społeczność"
+    },
+    "visibilityLabel": "Kto widzi to ćwiczenie?",
+    "visibility": {
+      "PRIVATE": "Prywatne",
+      "GYM": "Publiczne"
+    },
+    "visibilityHint": {
+      "PRIVATE": "Tylko Ty – w swoich planach i treningach.",
+      "GYM": "Wszyscy członkowie tej siłowni mogą je wybrać."
+    }
   },
   "plans": {
     "title": "Plany",
@@ -367,7 +392,10 @@
     "exerciseNoLongerAvailable": "To ćwiczenie nie jest już dostępne w tej siłowni. Usuń pozycję i dodaj inne ćwiczenie.",
     "editItem": "Edytuj: {{name}}",
     "deleteItem": "Usuń: {{name}}",
-    "paramsLabel": "{{sets}} serie po {{reps}} powtórzeń, przerwa {{rest}} s"
+    "paramsLabel": "{{sets}} serie po {{reps}} powtórzeń, przerwa {{rest}} s",
+    "exerciseNotAvailableHere": "To ćwiczenie nie jest dostępne na sprzęcie tej siłowni. Dodaj je jako nowe ćwiczenie z wybranym sprzętem.",
+    "noExerciseFound": "Nie ma takiego ćwiczenia na liście. Dodaj własne – od razu trafi do planu.",
+    "missingExercise": "Brakuje ćwiczenia na liście?"
   },
   "workout": {
     "startDay": "Rozpocznij trening",

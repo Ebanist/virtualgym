@@ -137,7 +137,7 @@ public class WorkoutService {
     @Transactional
     public SessionDto addExercise(UUID userId, UUID sessionId, AddSessionExerciseRequest request) {
         WorkoutSession session = getActiveOwned(userId, sessionId);
-        GymExerciseCatalog catalog = exerciseService.catalog(session.getGym().getId());
+        GymExerciseCatalog catalog = exerciseService.catalog(session.getGym().getId(), userId);
         if (!catalog.isAvailable(request.exerciseId(), request.equipmentId())) {
             throw new BusinessRuleException("exercise_not_available",
                     "This exercise cannot be done on the selected equipment in this gym");

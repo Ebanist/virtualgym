@@ -87,6 +87,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/exercises/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Szczegóły ćwiczenia; dla autora własnego ćwiczenia także powiązany sprzęt (equipmentIds) */
+        get: operations["get_1"];
+        /** Edycja własnego ćwiczenia (tylko autor); 409 exercise_used_by_others przy próbie ukrycia ćwiczenia używanego w cudzych planach */
+        put: operations["update_1"];
+        post?: never;
+        /** Usunięcie własnego ćwiczenia (ukrywa z list; plany i historia zostają) */
+        delete: operations["delete_1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/equipment/{id}": {
         parameters: {
             query?: never;
@@ -94,12 +113,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_1"];
+        get: operations["get_2"];
         /** Edycja sprzętu (członkowie siłowni); zmiana statusu na REMOVED_FROM_GYM też tutaj */
-        put: operations["update_1"];
+        put: operations["update_2"];
         post?: never;
         /** Usunięcie sprzętu (miękkie) */
-        delete: operations["delete_1"];
+        delete: operations["delete_2"];
         options?: never;
         head?: never;
         patch?: never;
@@ -419,7 +438,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Własne ćwiczenie przypisane do sprzętu siłowni (tylko członkowie) */
+        /** Własne ćwiczenie w siłowni (tylko członkowie); domyślnie prywatne */
         post: operations["createCustom"];
         delete?: never;
         options?: never;
@@ -618,7 +637,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_2"];
+        get: operations["get_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -668,7 +687,24 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_3"];
+        get: operations["get_4"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gyms/{gymId}/exercises/similar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Widoczne ćwiczenia o podobnej nazwie (podpowiedź przy dodawaniu) */
+        get: operations["similar"];
         put?: never;
         post?: never;
         delete?: never;
@@ -702,7 +738,7 @@ export interface paths {
             cookie?: never;
         };
         /** Sprzęt o podobnej nazwie w siłowni (ograniczanie duplikatów) */
-        get: operations["similar"];
+        get: operations["similar_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -719,7 +755,7 @@ export interface paths {
             cookie?: never;
         };
         /** Siłownie o podobnej nazwie w danym mieście (ostrzeżenie o duplikacie) */
-        get: operations["similar_1"];
+        get: operations["similar_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -767,24 +803,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Biblioteka ćwiczeń: globalne + własne ćwiczenia moich siłowni */
+        /** Biblioteka ćwiczeń: globalne + widoczne własne ćwiczenia moich siłowni (albo tylko siłowni gymId) */
         get: operations["library"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/exercises/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["get_4"];
         put?: never;
         post?: never;
         delete?: never;
@@ -971,6 +991,50 @@ export interface components {
         ReorderRequest: {
             ids: string[];
         };
+        CreateExerciseRequest: {
+            name: string;
+            /** @enum {string} */
+            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            secondaryMuscles?: ("CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO")[];
+            description?: string;
+            bodyweight?: boolean;
+            equipmentIds?: string[];
+            /** @enum {string} */
+            visibility?: "PRIVATE" | "GYM";
+        };
+        EquipmentTypeDto: {
+            /** Format: uuid */
+            id: string;
+            code: string;
+            name: string;
+            /** @enum {string} */
+            category: "STRENGTH_MACHINE" | "CABLE" | "FREE_WEIGHTS" | "BENCH" | "CARDIO" | "FUNCTIONAL" | "OTHER";
+        };
+        ExerciseDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @enum {string} */
+            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
+            secondaryMuscles: ("CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO")[];
+            description?: string;
+            bodyweight: boolean;
+            /** @enum {string} */
+            scope: "GLOBAL" | "CUSTOM";
+            /** @enum {string} */
+            visibility?: "PRIVATE" | "GYM";
+            mine: boolean;
+            /** Format: uuid */
+            gymId?: string;
+            equipmentTypes: components["schemas"]["EquipmentTypeDto"][];
+            equipmentIds?: (string | null)[];
+            createdBy?: components["schemas"]["UserRefDto"];
+        };
+        UserRefDto: {
+            /** Format: uuid */
+            id: string;
+            displayName: string;
+        };
         UpdateEquipmentRequest: {
             name: string;
             /** @enum {string} */
@@ -1015,19 +1079,6 @@ export interface components {
             /** Format: int64 */
             openReportCount: number;
             member: boolean;
-        };
-        EquipmentTypeDto: {
-            /** Format: uuid */
-            id: string;
-            code: string;
-            name: string;
-            /** @enum {string} */
-            category: "STRENGTH_MACHINE" | "CABLE" | "FREE_WEIGHTS" | "BENCH" | "CARDIO" | "FUNCTIONAL" | "OTHER";
-        };
-        UserRefDto: {
-            /** Format: uuid */
-            id: string;
-            displayName: string;
         };
         StartSessionRequest: {
             /** Format: uuid */
@@ -1184,31 +1235,6 @@ export interface components {
             member: boolean;
             /** Format: date-time */
             createdAt: string;
-        };
-        CreateExerciseRequest: {
-            name: string;
-            /** @enum {string} */
-            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
-            secondaryMuscles?: ("CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO")[];
-            description?: string;
-            bodyweight?: boolean;
-            equipmentIds?: string[];
-        };
-        ExerciseDto: {
-            /** Format: uuid */
-            id: string;
-            name: string;
-            /** @enum {string} */
-            primaryMuscle: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
-            secondaryMuscles: ("CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO")[];
-            description?: string;
-            bodyweight: boolean;
-            /** @enum {string} */
-            scope: "GLOBAL" | "CUSTOM";
-            /** Format: uuid */
-            gymId?: string;
-            equipmentTypes: components["schemas"]["EquipmentTypeDto"][];
-            createdBy?: components["schemas"]["UserRefDto"];
         };
         CreateEquipmentRequest: {
             name: string;
@@ -1635,12 +1661,80 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EquipmentDto"];
+                    "application/json": components["schemas"]["ExerciseDto"];
                 };
             };
         };
     };
     update_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExerciseRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseDto"];
+                };
+            };
+        };
+    };
+    delete_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EquipmentDto"];
+                };
+            };
+        };
+    };
+    update_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -1666,7 +1760,7 @@ export interface operations {
             };
         };
     };
-    delete_1: {
+    delete_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -2614,7 +2708,7 @@ export interface operations {
             };
         };
     };
-    get_2: {
+    get_3: {
         parameters: {
             query?: never;
             header?: never;
@@ -2676,7 +2770,7 @@ export interface operations {
             };
         };
     };
-    get_3: {
+    get_4: {
         parameters: {
             query?: never;
             header?: never;
@@ -2694,6 +2788,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GymDto"];
+                };
+            };
+        };
+    };
+    similar: {
+        parameters: {
+            query: {
+                name: string;
+            };
+            header?: never;
+            path: {
+                gymId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseDto"][];
                 };
             };
         };
@@ -2723,7 +2841,7 @@ export interface operations {
             };
         };
     };
-    similar: {
+    similar_1: {
         parameters: {
             query: {
                 name: string;
@@ -2747,7 +2865,7 @@ export interface operations {
             };
         };
     };
-    similar_1: {
+    similar_2: {
         parameters: {
             query: {
                 name: string;
@@ -2817,6 +2935,7 @@ export interface operations {
     library: {
         parameters: {
             query?: {
+                gymId?: string;
                 q?: string;
                 muscle?: "CHEST" | "BACK" | "LOWER_BACK" | "TRAPS" | "SHOULDERS" | "BICEPS" | "TRICEPS" | "FOREARMS" | "ABS" | "OBLIQUES" | "GLUTES" | "QUADRICEPS" | "HAMSTRINGS" | "ADDUCTORS" | "ABDUCTORS" | "CALVES" | "FULL_BODY" | "CARDIO";
             };
@@ -2833,28 +2952,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExerciseDto"][];
-                };
-            };
-        };
-    };
-    get_4: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ExerciseDto"];
                 };
             };
         };

@@ -9,6 +9,7 @@ export const customExerciseSchema = z
     description: z.string().trim().max(2000, { error: 'validation.length' }).optional(),
     bodyweight: z.boolean(),
     equipmentIds: z.array(z.string()),
+    visibility: z.enum(['PRIVATE', 'GYM']),
   })
   .refine((v) => v.bodyweight || v.equipmentIds.length > 0, {
     error: 'exercises.equipmentRequired',

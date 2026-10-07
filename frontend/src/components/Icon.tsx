@@ -35,6 +35,7 @@ const PATHS = {
   x: 'M18 6 6 18M6 6l12 12',
   bolt: 'M13 2 4 14h7l-1 8 9-12h-7z',
   book: 'M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3zM4 17a3 3 0 0 1 3-3h11',
+  lock: 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4',
 } as const
 
 export type IconName = keyof typeof PATHS

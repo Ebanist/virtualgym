@@ -71,7 +71,9 @@ Reset bazy: `docker compose down -v && docker compose up -d`.
 1. Zaloguj się jako `anna@example.com` / `Password123`.
 2. **Start** → „Fitness Arena Centrum” → lista sprzętu (filtr kategorii, szukanie), dodaj sprzęt (podpowiedzi
    podobnych nazw, zdjęcie), na stronie sprzętu: zgłoś problem, oznacz jako usunięty, sprawdź historię zmian.
-3. „Ćwiczenia dostępne w tej siłowni” → filtr partii; „Dodaj własne” ćwiczenie przypisane do sprzętu.
+3. „Ćwiczenia dostępne w tej siłowni” → filtr partii i pochodzenia (Biblioteka / Moje / Społeczność);
+   „Nowe ćwiczenie” (prywatne lub publiczne). Nowe ćwiczenie można też dodać prosto z planu, ze strony sprzętu
+   („Powiąż ćwiczenie”) i podczas treningu.
 4. **Plany** → „FBW – 2 dni”: pozycja na suwnicy Smitha ma ostrzeżenie; przesuwaj ćwiczenia ↑/↓, dodaj ćwiczenie
    (lista zawiera tylko ćwiczenia możliwe w tej siłowni), kopiuj / archiwizuj plan.
 5. Dzień A → „Rozpocznij trening”: widać poprzedni wynik, odhacz serie (startuje timer przerwy), wpisz ciężar
@@ -102,7 +104,8 @@ docker-compose.yml   PostgreSQL 16
 - `storage/` – interfejs `FileStorage` (implementacja `LocalFileStorage`, docelowo S3/MinIO), walidacja zdjęć
   po sygnaturze pliku (jpg/png/webp, maks. 5 MB, maks. 8000 px), miniatury 320 px (Thumbnailator, JPEG).
   Pliki serwowane publicznie przez `GET /api/v1/files/{id}` i `/thumbnail` (cache 1 rok).
-- `exercise/` – biblioteka 67 ćwiczeń (seed w migracji V4), własne ćwiczenia siłowni, powiązania sprzęt↔ćwiczenie.
+- `exercise/` – biblioteka 67 ćwiczeń (seed w migracji V4), własne ćwiczenia (prywatne lub publiczne dla członków
+  siłowni, edycja i usuwanie przez autora), powiązania sprzęt↔ćwiczenie, podpowiedzi podobnych nazw.
   Logika „co da się zrobić w tej siłowni” w czystej klasie `ExerciseAvailabilityResolver` (testy jednostkowe):
   ćwiczenie z masą ciała – zawsze; inaczej potrzebny dostępny sprzęt o wymaganym typie albo jawne powiązanie.
 - `plan/` – plany (dni i pozycje jako agregat z kaskadą, soft delete). Każda modyfikacja zwraca cały plan.

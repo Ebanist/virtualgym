@@ -19,7 +19,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "exercises")
@@ -60,6 +62,13 @@ public class Exercise extends BaseEntity {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+    /** Dla ćwiczeń CUSTOM: kto je widzi. Dla GLOBAL bez znaczenia (zawsze widoczne). */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ExerciseVisibility visibility = ExerciseVisibility.GYM;
+
+    private Instant deletedAt;
+
     /** Typy sprzętu, na których można wykonać ćwiczenie (wystarczy jeden). */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "exercise_equipment_types", joinColumns = @JoinColumn(name = "exercise_id"),
@@ -69,20 +78,30 @@ public class Exercise extends BaseEntity {
     protected Exercise() {
     }
 
-    public static Exercise custom(Gym gym, User author, String name, MuscleGroup primaryMuscle,
-            Set<MuscleGroup> secondaryMuscles, String description, boolean bodyweight) {
+    public static Exercise custom(Gym gym, User author, Details details) {
         Exercise e = new Exercise();
         e.scope = ExerciseScope.CUSTOM;
         e.gym = gym;
         e.createdBy = author;
-        e.name = name;
-        e.normalizedName = TextNormalizer.normalize(name);
-        e.primaryMuscle = primaryMuscle;
-        e.secondaryMuscles = secondaryMuscles.isEmpty() ? new HashSet<>() : EnumSet.copyOf(secondaryMuscles);
-        e.secondaryMuscles.remove(primaryMuscle);
-        e.description = description;
-        e.bodyweight = bodyweight;
+        e.apply(details);
         return e;
+    }
+
+    /** Edytowalne pola ćwiczenia własnego. */
+    public record Details(String name, MuscleGroup primaryMuscle, Set<MuscleGroup> secondaryMuscles,
+            String description, boolean bodyweight, ExerciseVisibility visibility) {
+    }
+
+    public void apply(Details details) {
+        this.name = details.name();
+        this.normalizedName = TextNormalizer.normalize(details.name());
+        this.primaryMuscle = details.primaryMuscle();
+        this.secondaryMuscles = details.secondaryMuscles().isEmpty() ? new HashSet<>()
+                : EnumSet.copyOf(details.secondaryMuscles());
+        this.secondaryMuscles.remove(details.primaryMuscle());
+        this.description = details.description();
+        this.bodyweight = details.bodyweight();
+        this.visibility = details.visibility();
     }
 
     public String getName() {
@@ -125,8 +144,31 @@ public class Exercise extends BaseEntity {
         return equipmentTypes;
     }
 
-    /** Czy ćwiczenie jest widoczne w kontekście danej siłowni (globalne albo własne tej siłowni). */
-    public boolean isVisibleInGym(java.util.UUID gymId) {
-        return scope == ExerciseScope.GLOBAL || (gym != null && gym.getId().equals(gymId));
+    public ExerciseVisibility getVisibility() {
+        return visibility;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
+    }
+
+    public void markDeleted(Instant now) {
+        this.deletedAt = now;
+    }
+
+    public boolean isAuthor(UUID userId) {
+        return createdBy != null && createdBy.getId().equals(userId);
+    }
+
+    /**
+     * Czy użytkownik widzi ćwiczenie w kontekście siłowni: biblioteka zawsze; własne – tylko nieusunięte
+     * z tej siłowni, publiczne albo jego własne prywatne.
+     */
+    public boolean isVisibleTo(UUID userId, UUID gymId) {
+        if (scope == ExerciseScope.GLOBAL) {
+            return true;
+        }
+        return !isDeleted() && gym != null && gym.getId().equals(gymId)
+                && (visibility == ExerciseVisibility.GYM || isAuthor(userId));
     }
 }

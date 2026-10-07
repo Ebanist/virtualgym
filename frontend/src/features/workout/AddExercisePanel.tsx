@@ -7,6 +7,8 @@ import { Card } from '../../components/Card'
 import { SelectField } from '../../components/SelectField'
 import { TextField } from '../../components/TextField'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
+import { ExerciseFormSheet } from '../exercises/ExerciseFormSheet'
+import { OriginBadge } from '../exercises/OriginBadge'
 import styles from './Workout.module.css'
 
 /** Dodanie ćwiczenia do treningu – tylko ćwiczenia dostępne w siłowni treningu. */
@@ -20,17 +22,23 @@ export function AddExercisePanel({ gymId, onAdd, onClose, pending }: {
   const [q, setQ] = useState('')
   const available = useAvailableExercises(gymId, useDebouncedValue(q))
   const [equipmentChoice, setEquipmentChoice] = useState<Record<string, string>>({})
+  const [creating, setCreating] = useState(false)
 
   return (
     <Card>
       <h2>{t('workout.addExercise')}</h2>
       <TextField label={t('exercises.search')} value={q} onChange={(e) => setQ(e.target.value)} autoFocus />
+      <div className={styles.row}>
+        <Button small variant="primary" icon="plus" onClick={() => setCreating(true)}>
+          {q.trim() ? t('exercises.addNamed', { name: q.trim() }) : t('exercises.newExercise')}
+        </Button>
+      </div>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {available.data?.slice(0, 30).map(({ exercise, equipment }) => {
           const choice = equipmentChoice[exercise.id] ?? (exercise.bodyweight ? '' : (equipment[0]?.id ?? ''))
           return (
             <li key={exercise.id} className={styles.exercise}>
-              <strong>{exercise.name}</strong>
+              <strong>{exercise.name}</strong> <OriginBadge exercise={exercise} />
               {(equipment.length > 1 || (exercise.bodyweight && equipment.length > 0)) && (
                 <SelectField
                   label={t('plans.equipment')}
@@ -61,6 +69,22 @@ export function AddExercisePanel({ gymId, onAdd, onClose, pending }: {
         })}
       </ul>
       <Button onClick={onClose}>{t('common.close')}</Button>
+      <ExerciseFormSheet
+        open={creating}
+        onClose={() => setCreating(false)}
+        gymId={gymId}
+        initialName={q.trim()}
+        onSaved={(exercise) => {
+          setCreating(false)
+          // Pierwszy wybrany sprzęt; ćwiczenie z masą ciała – bez sprzętu.
+          const equipmentId = exercise.bodyweight ? undefined : (exercise.equipmentIds?.find((id) => !!id) ?? undefined)
+          onAdd({ exerciseId: exercise.id, equipmentId })
+        }}
+        onPickExisting={(exercise) => {
+          setCreating(false)
+          setQ(exercise.name)
+        }}
+      />
     </Card>
   )
 }

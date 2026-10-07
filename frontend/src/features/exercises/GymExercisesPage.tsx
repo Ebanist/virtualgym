@@ -5,7 +5,7 @@ import { errorMessage } from '../../api/errors'
 import { useAvailableExercises, type MuscleGroup } from '../../api/exercises'
 import { useGym } from '../../api/gyms'
 import { Alert } from '../../components/Alert'
-import { buttonClass } from '../../components/buttonClass'
+import { Button } from '../../components/Button'
 import { EmptyState } from '../../components/EmptyState'
 import { Icon } from '../../components/Icon'
 import { PageHeader } from '../../components/PageHeader'
@@ -13,7 +13,10 @@ import { SkeletonList } from '../../components/Skeleton'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { ExerciseCard } from './ExerciseCard'
 import { ExerciseFilters } from './ExerciseFilters'
+import { ExerciseFormSheet } from './ExerciseFormSheet'
 import styles from './Exercises.module.css'
+import { MyExerciseActions } from './MyExerciseActions'
+import { matchesOrigin, type ExerciseOrigin } from './origin'
 
 export function GymExercisesPage() {
   const { gymId = '' } = useParams()
@@ -21,8 +24,12 @@ export function GymExercisesPage() {
   const gym = useGym(gymId)
   const [q, setQ] = useState('')
   const [muscle, setMuscle] = useState<MuscleGroup | ''>('')
+  const [origin, setOrigin] = useState<ExerciseOrigin | ''>('')
+  const [creating, setCreating] = useState(false)
   const debouncedQ = useDebouncedValue(q)
   const exercises = useAvailableExercises(gymId, debouncedQ, muscle || undefined)
+  const visible = exercises.data?.filter((x) => matchesOrigin(x.exercise, origin))
+  const member = gym.data?.member
 
   return (
     <>
@@ -31,22 +38,34 @@ export function GymExercisesPage() {
         subtitle={t('exercises.availableIntro')}
         back={{ to: `/gyms/${gymId}`, label: gym.data?.name ?? t('common.back') }}
         action={
-          gym.data?.member && (
-            <Link to={`/gyms/${gymId}/exercises/new`} className={buttonClass({ variant: 'primary', small: true })}>
-              <Icon name="plus" size={16} />
+          member && (
+            <Button variant="primary" small icon="plus" onClick={() => setCreating(true)}>
               {t('exercises.addCustom')}
-            </Link>
+            </Button>
           )
         }
       />
-      <ExerciseFilters q={q} muscle={muscle} onQChange={setQ} onMuscleChange={setMuscle} />
+      <ExerciseFilters q={q} muscle={muscle} onQChange={setQ} onMuscleChange={setMuscle} origin={origin} onOriginChange={setOrigin} />
       {exercises.isError && <Alert kind="error">{errorMessage(t, exercises.error)}</Alert>}
       {exercises.isPending && <SkeletonList />}
-      {exercises.data?.length === 0 && <EmptyState icon="search">{t('exercises.noResults')}</EmptyState>}
+      {visible?.length === 0 && (
+        <EmptyState
+          icon="search"
+          action={
+            member && (
+              <Button variant="primary" icon="plus" onClick={() => setCreating(true)}>
+                {q.trim() ? t('exercises.addNamed', { name: q.trim() }) : t('exercises.addCustom')}
+              </Button>
+            )
+          }
+        >
+          {t('exercises.noResults')}
+        </EmptyState>
+      )}
       <ul className={styles.list}>
-        {exercises.data?.map(({ exercise, equipment }) => (
+        {visible?.map(({ exercise, equipment }) => (
           <li key={exercise.id}>
-            <ExerciseCard exercise={exercise}>
+            <ExerciseCard exercise={exercise} action={<MyExerciseActions exercise={exercise} />}>
               {equipment.length > 0 && (
                 <div className={styles.meta}>
                   <Icon name="gym" size={14} /> {t('exercises.onEquipment')}:{' '}
@@ -62,6 +81,13 @@ export function GymExercisesPage() {
           </li>
         ))}
       </ul>
+      <ExerciseFormSheet
+        open={creating}
+        onClose={() => setCreating(false)}
+        gymId={gymId}
+        initialName={q.trim()}
+        onSaved={() => setCreating(false)}
+      />
     </>
   )
 }
