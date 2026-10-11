@@ -4,6 +4,8 @@ Aplikacja dla bywalców siłowni: wybierasz swoją siłownię, widzisz sprzęt d
 i układasz plany treningowe wyłącznie na tym sprzęcie. Repozytorium zawiera MVP wersji **free** (web, RWD).
 
 Plan MVP (model danych, endpointy, etapy): [`docs/PLAN.md`](docs/PLAN.md).
+Dokumentacja wysokopoziomowa (technologie, instalacja na macOS, aktualizacja, historia zmian):
+[`docs/dokumentacja.html`](docs/dokumentacja.html) – otwórz w przeglądarce.
 
 ## Status
 

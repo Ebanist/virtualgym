@@ -15,6 +15,11 @@ cd frontend && npm run gen:api               # typy TS z backend/target/openapi.
 ```
 
 Po każdej zmianie: backend `./mvnw verify` i frontend lint + typecheck + test + build muszą przechodzić.
+
+**Dokumentacja dla użytkownika:** `docs/dokumentacja.html` (opublikowana jako artefakt
+https://claude.ai/artifact/M9Hwtq3zmQEDHuvj2uZJAz). Przy każdej iteracji aktualizuj ją (technologie, uruchomienie,
+kroki aktualizacji, nowy wpis w „Historia zmian” – zaznacz migracje i nowe zależności), zmień datę w nagłówku,
+opublikuj ponownie (ten sam URL) i podaj link użytkownikowi.
 Reset bazy dev (ponowny seed): `docker compose down -v && docker compose up -d`.
 
 ## Backend – konwencje
